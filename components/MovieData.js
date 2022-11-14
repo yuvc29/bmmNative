@@ -7,7 +7,7 @@ export default data = [
       rating: 3.4,
       title: 'UUNCHAI',
       language: 'Hindi',
-      format: 'adventure/Drama/Family',
+      format: 'Adventure/Drama/Family',
     },
     {
       movieId: 2,

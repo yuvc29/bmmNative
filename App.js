@@ -15,9 +15,27 @@ export default function App() {
     // <MovieDetails/>
     <NavigationContainer>
       <stack.Navigator>
-        <stack.Screen name='Home' component={Home}/>
-        <stack.Screen name='Search' component={Search}/>
-        <stack.Screen name='MovieDetails' component={MovieDetails}/>
+        <stack.Screen name='Home' component={Home} options={{ 
+            headerTitle: "BookMyMovie",
+            headerStyle: {
+              backgroundColor: '#333545',
+            },
+            headerTintColor: '#fff',
+          }}/>
+        <stack.Screen name='Search' component={Search} options={{ 
+            // headerTitle: "",
+            headerStyle: {
+              backgroundColor: '#333545',
+            },
+            headerTintColor: '#fff',
+          }}/>
+        <stack.Screen name='MovieDetails' component={MovieDetails} options={{ 
+            headerTitle: "No Name",
+            headerStyle: {
+              backgroundColor: '#333545',
+            },
+            headerTintColor: '#fff',
+          }}/>
       </stack.Navigator>
     </NavigationContainer>
   )

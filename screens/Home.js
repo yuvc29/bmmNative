@@ -15,16 +15,16 @@ import {
 import {FlatListSlider} from 'react-native-flatlist-slider';
 import {searchIcon, homeLogo, order} from '../assets';
 import MovieCard from '../components/MovieCard';
-import data from '../components/MovieData'
+import data from '../components/MovieData';
 
 // navigation.navigate("Search")
 
 export default function Home({navigation}) {
   const screenWidth = Math.round(Dimensions.get('window').width);
 
-  const handleSearch = ()=>{
+  const handleSearch = () => {
     navigation.navigate('Search');
-  }
+  };
 
   return (
     <View style={styles.homeContainer}>
@@ -52,7 +52,7 @@ export default function Home({navigation}) {
             separator={0}
             loop={true}
             autoScroll={true}
-            onPress={(index)=> navigation.navigate('MovieDetails')}
+            onPress={index => navigation.navigate('MovieDetails')}
             indicator={false}
           />
         </ScrollView>
@@ -64,7 +64,9 @@ export default function Home({navigation}) {
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           {data.map((item, index) => {
             return (
-              <TouchableOpacity key={index} onPress={()=> navigation.navigate('MovieDetails')}>
+              <TouchableOpacity
+                key={index}
+                onPress={() => navigation.navigate('MovieDetails',{poster : item.poster, title:item.title})}>
                 <MovieCard
                   poster={item.poster}
                   title={item.title}
@@ -76,14 +78,18 @@ export default function Home({navigation}) {
         </ScrollView>
 
         <View style={styles.footer}>
-          <Pressable style={styles.footerItem} >
-            <Image source={homeLogo} style={styles.homeLogo}/>
-            <Text>Home</Text>
-          </Pressable>
-          <Pressable style={styles.footerItem}>
-          <Image source={order} style={styles.homeLogo}/>
-            <Text>Orders</Text>
-          </Pressable>
+          <TouchableOpacity>
+            <Pressable style={styles.footerItem}>
+              <Image source={homeLogo} style={styles.homeLogo} />
+              <Text>Home</Text>
+            </Pressable>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Pressable style={styles.footerItem}>
+              <Image source={order} style={styles.homeLogo} />
+              <Text>Orders</Text>
+            </Pressable>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -96,41 +102,41 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
 
-  recommended:{
-    marginLeft:10,
-    fontSize:20,
-    color:'black',
-    fontWeight:'bold',
+  recommended: {
+    marginLeft: 10,
+    fontSize: 20,
+    color: 'black',
+    fontWeight: 'bold',
   },
 
   heading: {
-    marginLeft:10,
+    marginLeft: 10,
     color: '#FFFFFF',
     fontSize: 30,
   },
 
-  homeLogo:{
-    marginLeft:5,
-    height:25,
-    width:25,
+  homeLogo: {
+    marginLeft: 5,
+    height: 25,
+    width: 25,
   },
 
   navBar: {
     // marginLeft:10,
     flex: 0.8,
-    flexDirection:'column',
+    flexDirection: 'column',
     backgroundColor: '#333545',
     // justifyContent:'space-around'
   },
 
   navTop: {
     flexDirection: 'row',
-    justifyContent:'flex-start',
+    justifyContent: 'flex-start',
   },
 
-  location:{
-    marginLeft:10,
-    color:'white',
+  location: {
+    marginLeft: 10,
+    color: 'white',
   },
 
   touchIcon: {
@@ -138,26 +144,27 @@ const styles = StyleSheet.create({
   },
 
   homeBody: {
+    marginTop:5,
     flex: 8,
   },
 
   icon: {
-    marginLeft:100,
-    marginTop:5,
+    marginLeft: 100,
+    marginTop: 5,
     width: 40,
     height: 40,
     color: '#FFFFFF',
   },
 
-  footer:{
+  footer: {
     // margin:10,
-    padding:5,
-    backgroundColor:'#e7464e',
-    flexDirection:'row',
-    justifyContent:'space-between'
+    padding: 5,
+    backgroundColor: '#e7464e',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 
-  footerItem:{
-    marginHorizontal:60,
-  }
+  footerItem: {
+    marginHorizontal: 60,
+  },
 });

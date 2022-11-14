@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   Button,
   Dimensions,
@@ -12,7 +12,11 @@ import {
 import MovieCard from '../components/MovieCard';
 import data from '../components/MovieData';
 
-export default function MovieDetails() {
+export default function MovieDetails({route,navigation}) {
+  useEffect (() => {
+    navigation.setOptions({ headerTitle: route.params.title});
+}, []);
+
   const cast = [
     {
       photo:
@@ -33,9 +37,7 @@ export default function MovieDetails() {
     <View style={styles.movieDetails}>
       <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
         <Image
-          source={{
-            uri: 'https://assets-in.bmscdn.com/iedb/movies/images/mobile/thumbnail/xlarge/uunchai-et00335262-1665386678.jpg',
-          }}
+          source={{uri:route.params.poster}}
           style={styles.image}
         />
         <Text>length • genre • format • releaseDate</Text>
@@ -43,10 +45,10 @@ export default function MovieDetails() {
         <View style={styles.cast}>
           <Text style={styles.castText}>Cast</Text>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            {cast.map(field => {
+            {cast.map((field,index) => {
               // console.log("*****************",field.photo);
               return (
-                <View style={styles.castCard}>
+                <View key={index} style={styles.castCard}>
                   <Image source={{uri: field.photo}} style={styles.castImage} />
                   <Text style={styles.castText}>AB</Text>
                 </View>
@@ -59,7 +61,7 @@ export default function MovieDetails() {
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             {data.map((item, index) => {
               return (
-                <TouchableOpacity key={index}>
+                <TouchableOpacity key={index} onPress={()=> navigation.navigate('MovieDetails',{title:item.title, poster:item.poster})}>
                   <MovieCard
                     poster={item.poster}
                     title={item.title}
@@ -115,6 +117,7 @@ const styles = StyleSheet.create({
     marginRight:20,
   },
   button: {
+    // backgroundColor:'black',
     flex: 0.06,
     margin: 10,
   },
