@@ -13,11 +13,9 @@ import {
   View,
 } from 'react-native';
 import {FlatListSlider} from 'react-native-flatlist-slider';
-import {searchIcon, homeLogo, order} from '../assets';
+import {searchIcon, homeLogo, order, profile} from '../assets';
 import MovieCard from '../components/MovieCard';
 import data from '../components/MovieData';
-
-// navigation.navigate("Search")
 
 export default function Home({navigation}) {
   const screenWidth = Math.round(Dimensions.get('window').width);
@@ -62,10 +60,10 @@ export default function Home({navigation}) {
         </View>
 
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          {data.map((item, index) => {
+          {data.map((item) => {
             return (
               <TouchableOpacity
-                key={index}
+                // key={index}
                 onPress={() => navigation.navigate('MovieDetails',{poster : item.poster, title:item.title})}>
                 <MovieCard
                   poster={item.poster}
@@ -88,6 +86,12 @@ export default function Home({navigation}) {
             <Pressable style={styles.footerItem}>
               <Image source={order} style={styles.homeLogo} />
               <Text>Orders</Text>
+            </Pressable>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={navigation.navigate('Profile')}>
+            <Pressable style={styles.footerItem}>
+              <Image source={profile} style={styles.homeLogo} />
+              <Text>Profile</Text>
             </Pressable>
           </TouchableOpacity>
         </View>
@@ -165,6 +169,6 @@ const styles = StyleSheet.create({
   },
 
   footerItem: {
-    marginHorizontal: 60,
+    marginHorizontal: 40,
   },
 });
