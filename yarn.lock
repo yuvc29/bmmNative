@@ -1372,6 +1372,18 @@
   dependencies:
     "merge-options" "^3.0.4"
 
+"@ouroboros/react-native-picker@^0.2.1":
+  "integrity" "sha512-+GXclbaPWoivG/OEoPWRH/mZGbACd/2eSdowacxrSFElM9CIk8CDnD626AWO9oLUpQLzo1r3id51GGbbYxlK5A=="
+  "resolved" "https://registry.npmjs.org/@ouroboros/react-native-picker/-/react-native-picker-0.2.1.tgz"
+  "version" "0.2.1"
+  dependencies:
+    "@ouroboros/tools" "^0.1.0"
+
+"@ouroboros/tools@^0.1.0":
+  "integrity" "sha512-2b3pkpIzeyA/4AYxzZrGKOr/scb7+UDPd3g8nJiI+z3UMiiAkKk0Y3rf38xS3LAQrjBbXVU9uVD4eoqSoLstAA=="
+  "resolved" "https://registry.npmjs.org/@ouroboros/tools/-/tools-0.1.0.tgz"
+  "version" "0.1.0"
+
 "@react-native-community/cli-clean@^9.2.1":
   "integrity" "sha512-dyNWFrqRe31UEvNO+OFWmQ4hmqA07bR9Ief/6NnGwx67IO9q83D5PEAf/o96ML6jhSbDwCmpPKhPwwBbsyM3mQ=="
   "resolved" "https://registry.npmjs.org/@react-native-community/cli-clean/-/cli-clean-9.2.1.tgz"

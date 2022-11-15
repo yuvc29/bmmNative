@@ -39,6 +39,14 @@ import Search from './src/components/Search';
          
          <Stack.Screen name='Home' component={Home} options={{ 
             headerTitle: "BookMyMovie",
+            headerShown:false,
+            headerStyle: {
+              backgroundColor: '#333545',
+            },
+            headerTintColor: '#fff',
+          }}/>
+          <stack.Screen name='Profile' component={Profile} options={{ 
+            headerTitle: "Hi!",
             headerStyle: {
               backgroundColor: '#333545',
             },
@@ -60,6 +68,12 @@ import Search from './src/components/Search';
               },
               headerTintColor: '#fff',
             }}/>
+          <Stack.Screen name='Orders' component={Orders} options={{ 
+            headerStyle: {
+              backgroundColor: '#333545',
+            },
+            headerTintColor: '#fff',
+          }}/>
 
           <Stack.Screen
            name="TheatreTimeSelection"

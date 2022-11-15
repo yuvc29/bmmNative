@@ -10,19 +10,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {clapperboard, loupe} from '../assets';
-import { getAllMovies } from '../api/AllMovies';
 
-export default function Search({navigation}) {
-  const [data,setData] = useState([]);
-
-  useEffect(() => {
-      const fetchMovieData = async() =>{
-        const response = await getAllMovies();
-        console.log("Total Movies Items : ",response.data.length);
-        setData(response.data);
-    }
-    fetchMovieData();
-  }, []);
+export default function Search({route,navigation}) {
+  
 
   const [display, setDisplay] = useState(false);
   const [filterItem, setFilterItem] = useState(data);
@@ -60,7 +50,7 @@ export default function Search({navigation}) {
           return (
             <TouchableOpacity
               key={item.movieId}
-              onPress={() => navigation.navigate('MovieDetails')}>
+              onPress={() => navigation.navigate('MovieDetails',{poster: item.poster})}>
               <View style={styles.list}>
                 <Text style={styles.titles}>{item.title}</Text>
                 <Image style={styles.icon} source={clapperboard} />
