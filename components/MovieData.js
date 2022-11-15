@@ -1,16 +1,3 @@
-// const data = []
-// fetch("http://localhost:8080/movie")
-//   .then(response => response.json())
-//   .then(function (result) {
-//     console.log('Result', result)
-//     for (var i = 0; i < result.length; i++) {
-//       data.push(result[i])
-//     }
-//     // console.log('Words', data);
-//   })
-//   .catch(error => console.log('error', error));
-
-
 export default data = [
     {
       movieId: 1,
@@ -163,3 +150,5 @@ export default data = [
       format: 'Adventure/Drama/Thriller',
     },
   ];
+
+// export default data = [];

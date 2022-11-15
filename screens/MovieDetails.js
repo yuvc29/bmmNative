@@ -39,6 +39,7 @@ export default function MovieDetails({route,navigation}) {
         <Image
           source={{uri:route.params.poster}}
           style={styles.image}
+          resizeMode='contain'
         />
         <Text>length • genre • format • releaseDate</Text>
         <Text>desc</Text>

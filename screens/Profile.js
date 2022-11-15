@@ -22,7 +22,6 @@ export default function Profile() {
 
   return (
     <View style={styles.profile}>
-      <Text style={styles.topheading}>Hi!</Text>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.top}>
           <Text style={styles.heading}>Mobile Number</Text>

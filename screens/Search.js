@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {clapperboard, loupe} from '../assets';
 
-export default function Search({navigation}) {
+export default function Search({route,navigation}) {
   const data = [
     {
       movieId: 1,
@@ -201,7 +201,7 @@ export default function Search({navigation}) {
           return (
             <TouchableOpacity
               key={item.movieId}
-              onPress={() => navigation.navigate('MovieDetails')}>
+              onPress={() => navigation.navigate('MovieDetails',{poster: item.poster})}>
               <View style={styles.list}>
                 <Text style={styles.titles}>{item.title}</Text>
                 <Image style={styles.icon} source={clapperboard} />
