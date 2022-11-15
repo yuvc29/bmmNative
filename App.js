@@ -20,14 +20,16 @@
  
  import { NavigationContainer } from '@react-navigation/native';
  import { createNativeStackNavigator } from '@react-navigation/native-stack';
- import TheatreTimeSelection from './src/components/TheatreTimeSelection';
- import Seating from './src/components/Seating';
- import PaymentPage from './src/components/PaymentPage';
- import Ticket from './src/components/Ticket';
- 
+
+import TheatreTimeSelection from './src/components/TheatreTimeSelection';
+import Seating from './src/components/Seating';
+import PaymentPage from './src/components/PaymentPage';
+import Ticket from './src/components/Ticket';
 import Home from "./src/components/Home"
 import MovieDetails from './src/components/MovieDetails';
 import Search from './src/components/Search';
+import Profile from './src/components/Profile';
+import Orders from './src/components/Orders';
 
  const Stack = createNativeStackNavigator();
  
@@ -45,7 +47,7 @@ import Search from './src/components/Search';
             },
             headerTintColor: '#fff',
           }}/>
-          <stack.Screen name='Profile' component={Profile} options={{ 
+          <Stack.Screen name='Profile' component={Profile} options={{ 
             headerTitle: "Hi!",
             headerStyle: {
               backgroundColor: '#333545',
@@ -55,6 +57,7 @@ import Search from './src/components/Search';
 
           <Stack.Screen name='Search' component={Search} options={{ 
               headerTitle: "Search",
+              headerShown:false,
             headerStyle: {
               backgroundColor: '#333545',
             },

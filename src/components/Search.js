@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   Image,
@@ -9,14 +9,24 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
+import { getAllMovies } from '../api/AllMovies';
 import {clapperboard, loupe} from '../assets';
 
 export default function Search({route,navigation}) {
   
-
+  const [data, setData] = useState([]);
   const [display, setDisplay] = useState(false);
   const [filterItem, setFilterItem] = useState(data);
   const [searchkey, setSearchKey] = useState('');
+
+  useEffect(() => {
+    const fetchMovieData = async() =>{
+      const response = await getAllMovies();
+      console.log("Total Movies Items : ",response.data.length);
+      setData(response.data);
+    }
+    fetchMovieData();
+  }, []);
 
   const filterMovie = e => {
     // console.log(e);
@@ -50,7 +60,7 @@ export default function Search({route,navigation}) {
           return (
             <TouchableOpacity
               key={item.movieId}
-              onPress={() => navigation.navigate('MovieDetails',{poster: item.poster})}>
+              onPress={() => navigation.navigate('MovieDetails',{movieItem : item})}>
               <View style={styles.list}>
                 <Text style={styles.titles}>{item.title}</Text>
                 <Image style={styles.icon} source={clapperboard} />

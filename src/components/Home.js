@@ -13,13 +13,14 @@ import {
   View,
 } from 'react-native';
 import {FlatListSlider} from 'react-native-flatlist-slider';
-import {searchIcon, homeLogo, order} from '../assets';
+import {searchIcon, homeLogo, order, profile} from '../assets';
 import MovieCard from './MovieCard';
 import {getAllMovies} from '../api/AllMovies';
 // navigation.navigate("Search")
 
 import data from './MovieData';
 import MovieDetails from './MovieDetails';
+import Picker from '@ouroboros/react-native-picker';
 
 export default function Home({navigation}) {
 
@@ -37,9 +38,45 @@ export default function Home({navigation}) {
   }, []);
   
 
+  let [city, setCity] = useState('DEL');
+
   const handleSearch = () => {
     navigation.navigate('Search');
   };
+
+  const ads = [
+    {
+      photo:
+        'https://assets-in.bmscdn.com/promotions/cms/creatives/1666863783729_fweb.jpg',
+    },
+    {
+      photo:
+        'https://assets-in.bmscdn.com/promotions/cms/creatives/1668000705029_vanbed.jpg',
+    },
+    {
+      photo:
+        'https://assets-in.bmscdn.com/promotions/cms/creatives/1668084708057_comico.jpg',
+    },
+    {
+      photo:
+        'https://img.ticketnew.com/tn/offer_banner/Gandhada_gudi_2/1920_400.jpg',
+    },
+    {
+      photo:
+        'https://d18hry5vavz86j.cloudfront.net/WebpTest/ba18f92f-ea45-40b5-aa04-9708f71f245f.webp',
+    },
+  ];
+
+  const Cities = [
+    {value: 'DEL', text: 'Delhi-NCR'},
+    {value: 'MUM', text: 'Mumbai'},
+    {value: 'BGR', text: 'Bangaluru'},
+    {value: 'HYD', text: 'Hyderabad'},
+    {value: 'ABD', text: 'Ahmedabad'},
+    {value: 'CG', text: 'Chandigarh'},
+    {value: 'CHN', text: 'Chennai'},
+    {value: 'KKR', text: 'Kolkata'},
+  ];
 
   return (
     <View style={styles.homeContainer}>
@@ -51,41 +88,49 @@ export default function Home({navigation}) {
           </TouchableOpacity>
         </View>
         <Pressable>
-          <Text style={styles.location}>Noida</Text>
+          <Picker
+          
+            onChanged={setCity}
+            options={Cities}
+            style={{
+              marginLeft: 10,
+              color: 'white',
+              padding: 5,
+              marginTop:-5,
+            }}
+            value={city}
+          />
         </Pressable>
       </View>
 
-      <View style={styles.homeBody}>
-        <ScrollView>
-          {/* <FlatListSlider
-            data={MovieDetails}
-            initialScrollIndex={0}
-            // timer={10000}
-            imageKey={'poster'}
-            local={false}
-            // height={300}
-            width={screenWidth}
-            separator={0}
-            loop={true}
-            autoScroll={true}
-            onPress={() => navigation.navigate('MovieDetails' ,{title:"dsad"})}
-            indicator={false}
-          /> */}
-        </ScrollView>
+      <ScrollView style={styles.homeBody} showsVerticalScrollIndicator={false}>
+        <FlatListSlider
+          data={ads}
+          imageKey={'photo'}
+          local={false}
+          width={screenWidth}
+          separator={0}
+          loop={true}
+          autoScroll={true}
+          onPress={() => console.log('')}
+          indicator={false}
+          height={180}
+        />
 
         <View>
           <Text style={styles.recommended}>Recommended Movies</Text>
         </View>
 
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          {movieList.map((item) => {
-            console.log("movieList Item" ,item);
+          {movieList.map(item => {
             return (
               <TouchableOpacity
-                key={item.movieId}
-                onPress={() => navigation.navigate('MovieDetails',{movieItem : item})}>
+                // key={index}
+                onPress={() =>
+                  navigation.navigate('MovieDetails',{movieItem : item})
+                }>
                 <MovieCard
-                  poster={item.poster}  
+                  poster={item.poster}
                   title={item.title}
                   format={item.format}
                 />
@@ -94,20 +139,47 @@ export default function Home({navigation}) {
           })}
         </ScrollView>
 
-        <View style={styles.footer}>
-          <TouchableOpacity>
-            <Pressable style={styles.footerItem}>
-              <Image source={homeLogo} style={styles.homeLogo} />
-              <Text>Home</Text>
-            </Pressable>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Pressable style={styles.footerItem}>
-              <Image source={order} style={styles.homeLogo} />
-              <Text>Orders</Text>
-            </Pressable>
-          </TouchableOpacity>
+        <View>
+          <Text style={styles.recommended}>You might also like</Text>
         </View>
+
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+          {movieList.map(item => {
+            return (
+              <TouchableOpacity
+                // key={index}
+                onPress={() =>
+                  navigation.navigate('MovieDetails',{movieItem : item})
+                }>
+                <MovieCard
+                  poster={item.poster}
+                  title={item.title}
+                  format={item.format}
+                />
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
+      </ScrollView>
+      <View style={styles.footer}>
+        <TouchableOpacity>
+          <Pressable style={styles.footerItem}>
+            <Image source={homeLogo} style={styles.homeLogo} />
+            <Text>Home</Text>
+          </Pressable>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Orders')}>
+          <Pressable style={styles.footerItem}>
+            <Image source={order} style={styles.homeLogo} />
+            <Text>Orders</Text>
+          </Pressable>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+          <Pressable style={styles.footerItem}>
+            <Image source={profile} style={styles.homeLogo} />
+            <Text>Profile</Text>
+          </Pressable>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -120,6 +192,7 @@ const styles = StyleSheet.create({
   },
 
   recommended: {
+    marginTop: 15,
     marginLeft: 10,
     fontSize: 20,
     color: 'black',
@@ -127,6 +200,7 @@ const styles = StyleSheet.create({
   },
 
   heading: {
+    marginTop:5,
     marginLeft: 10,
     color: '#FFFFFF',
     fontSize: 30,
@@ -140,7 +214,7 @@ const styles = StyleSheet.create({
 
   navBar: {
     // marginLeft:10,
-    flex: 0.8,
+    flex: 0.12,
     flexDirection: 'column',
     backgroundColor: '#333545',
     // justifyContent:'space-around'
@@ -161,13 +235,13 @@ const styles = StyleSheet.create({
   },
 
   homeBody: {
-    marginTop:5,
+    marginTop: 5,
     flex: 8,
   },
 
   icon: {
     marginLeft: 100,
-    marginTop: 5,
+    marginTop: 10,
     width: 40,
     height: 40,
     color: '#FFFFFF',
@@ -182,6 +256,6 @@ const styles = StyleSheet.create({
   },
 
   footerItem: {
-    marginHorizontal: 60,
+    marginHorizontal: 40,
   },
 });
