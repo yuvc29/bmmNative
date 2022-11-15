@@ -4,5 +4,6 @@ import clapperboard from './clapperboard.png'
 import homeLogo from './homeLogo.png'
 import order from './order.png'
 import profile from './profile.png'
+import user from './user.png'
 
-export {searchIcon, clapperboard, loupe, homeLogo, order, profile};
+export {searchIcon, clapperboard, loupe, homeLogo, order, profile, user};

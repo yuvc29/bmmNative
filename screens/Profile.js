@@ -7,7 +7,9 @@ import {
   StyleSheet,
   Switch,
   Button,
+  Image,
 } from 'react-native';
+import {user} from '../assets';
 
 export default function Profile() {
   const [gender, setGender] = useState(false);
@@ -23,6 +25,9 @@ export default function Profile() {
   return (
     <View style={styles.profile}>
       <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.user}>
+          <Image source={user} style={styles.icon} />
+        </View>
         <View style={styles.top}>
           <Text style={styles.heading}>Mobile Number</Text>
           <TextInput
@@ -79,6 +84,13 @@ export default function Profile() {
             <Text>Female</Text>
           </View>
         </View>
+        <View style={styles.signout}>
+          <Button
+            title="sign out"
+            color="#f14c63"
+            
+          />
+        </View>
       </ScrollView>
       <View>
         <Button
@@ -92,13 +104,22 @@ export default function Profile() {
 }
 
 const styles = StyleSheet.create({
+  user: {
+    backgroundColor: '#333545',
+  },
+  icon: {
+    marginLeft: 150,
+    height: 80,
+    width: 80,
+  },
+
   profile: {
     flex: 1,
     flexDirection: 'column',
-    margin: 10,
   },
   top: {
     // flex:2,
+    margin: 10,
     marginTop: 8,
     backgroundColor: '#FFFEF9',
   },
@@ -118,6 +139,7 @@ const styles = StyleSheet.create({
 
   bottom: {
     // flex:3,
+    margin: 10,
     marginTop: 20,
     backgroundColor: '#FFFEF9',
   },
@@ -127,6 +149,10 @@ const styles = StyleSheet.create({
     color: 'black',
   },
 
+  signout: {
+    margin: 10,
+    marginVertical: 30,
+  },
   textInput: {
     height: 40,
     marginTop: 8,
