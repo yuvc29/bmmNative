@@ -1,6 +1,6 @@
 import React from 'react';
 import {FlatList, Image, StyleSheet, View, Text} from 'react-native';
-import data from '../components/MovieData';
+import data from './MovieData'
 
 export default function Orders() {
 const item = ({item})=>{

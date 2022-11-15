@@ -14,9 +14,9 @@ import {
   View,
 } from 'react-native';
 import {FlatListSlider} from 'react-native-flatlist-slider';
-import {searchIcon, homeLogo, order, profile} from '../assets';
-import MovieCard from '../components/MovieCard';
-import data from '../components/MovieData';
+import {searchIcon, homeLogo, order, profile} from '../assets'
+import MovieCard from './MovieCard'
+import data from './MovieData'
 
 export default function Home({navigation}) {
   const screenWidth = Math.round(Dimensions.get('window').width);

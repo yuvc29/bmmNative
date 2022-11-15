@@ -9,18 +9,44 @@ import {
   Button,
   Image,
 } from 'react-native';
+import {UserSignup} from '../api/UserSignup'
 import {user} from '../assets';
 
 export default function Profile() {
-  const [gender, setGender] = useState(false);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [dob, setDob] = useState('');
+  const [mobile, setMobile] = useState('');
+  const [email, setEmail] = useState('');
+  const [gender, setGender] = useState('');
+  const [genderCheck, setGenderCheck] = useState(false);
   const [change, setChange] = useState(false);
+
+  // const handleSave = () => {
+  //   const fetchData = async () => {
+  //     const obj = {
+  //       firstName: firstName,
+  //       lastName: lastName,
+  //       dob: dob,
+  //       password: mobile,
+  //       email: email,
+  //       gender: gender,
+  //     };
+  //     console.log(obj);
+  //     const response = await UserSignup(obj);
+  //     console.log(response);
+  //   };
+  //   fetchData();
+  // };
+
   const handleSwitch = () => {
-    setGender(!gender);
+    setGenderCheck(!genderCheck);
+    setGender(genderCheck ? 'Female' : 'Male');
   };
 
-  const handleChange = () => {
-    setChange(true);
-  };
+  // const handleChange = () => {
+  //   setChange(true);
+  // };
 
   return (
     <View style={styles.profile}>
@@ -35,7 +61,9 @@ export default function Profile() {
             keyboardType="number-pad"
             placeholder="91090XXXXX"
             placeholderTextColor="#AFB0B0"
-            onChange={handleChange}
+            onChange={text => {
+              setMobile(text)
+            }}
           />
           <Text style={styles.heading}>Email Address</Text>
           <TextInput
@@ -43,7 +71,9 @@ export default function Profile() {
             keyboardType="email-address"
             placeholder="eg: abc@gmail.com"
             placeholderTextColor="#AFB0B0"
-            onChange={handleChange}
+            onChange={text => {
+              setEmail(text)
+            }}
           />
         </View>
         <View style={styles.bottom}>
@@ -54,14 +84,18 @@ export default function Profile() {
               style={styles.textInput}
               placeholder="Enter first name here"
               placeholderTextColor="#AFB0B0"
-              onChange={handleChange}
+              onChange={text => {
+                setFirstName(text)
+              }}
             />
             <Text style={styles.fields}>Last Name</Text>
             <TextInput
               style={styles.textInput}
               placeholder="Enter last name here"
               placeholderTextColor="#AFB0B0"
-              onChange={handleChange}
+              onChange={text => {
+                setLastName(text)
+              }}
             />
             <Text style={styles.fields}>Birthday</Text>
             <TextInput
@@ -69,7 +103,9 @@ export default function Profile() {
               keyboardType="phone-pad"
               placeholder="DD/MM/YY"
               placeholderTextColor="#AFB0B0"
-              onChange={handleChange}
+              onChange={text => {
+                setDob(text)
+              }}
             />
             <Text style={styles.fields}>Identity</Text>
           </View>
@@ -79,24 +115,21 @@ export default function Profile() {
               trackColor={{false: '#43C9FF', true: '#F243FF'}}
               thumbColor="#A2A2A2"
               onChange={handleSwitch}
-              value={gender}
+              value={genderCheck}
             />
             <Text>Female</Text>
           </View>
         </View>
         <View style={styles.signout}>
-          <Button
-            title="sign out"
-            color="#f14c63"
-            
-          />
+          <Button title="sign out" color="#f14c63" />
         </View>
       </ScrollView>
       <View>
         <Button
           title="Save Changes"
           color="#f14c63"
-          disabled={change ? false : true}
+          // disabled={change ? false : true}
+          onPress={handleSave}
         />
       </View>
     </View>

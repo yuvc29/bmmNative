@@ -9,8 +9,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import MovieCard from '../components/MovieCard';
-import data from '../components/MovieData';
+import MovieCard from './MovieCard'
+import data from './MovieData'
 
 export default function MovieDetails({route,navigation}) {
   useEffect (() => {
