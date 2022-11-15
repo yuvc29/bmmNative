@@ -39,7 +39,7 @@ export default function Ticket({navigation}) {
                 </View>
       </View>
 
-        <TouchableOpacity style = {styles.navigateHome} onPress= {() => navigation.navigate("TheatreTimeSelection")}>
+        <TouchableOpacity style = {styles.navigateHome} onPress= {() => navigation.navigate("Home")}>
             <Text style = {{alignSelf:"center", fontSize:20, fontWeight:"bold", color:"white"}}> Payment Success : Go to Home !</Text>
         </TouchableOpacity>
 

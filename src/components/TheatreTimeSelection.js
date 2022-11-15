@@ -1,25 +1,74 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, View, Text, SafeAreaView, FlatList, TouchableOpacity, Button } from 'react-native';
+import { GetTheatreList , GetShowsByTheatre} from '../api/GetTheatreList';
+// const theatreList = [
+//     {
+//         name :"INOX",
+//         address : "Shipra Mall , gh",
+//         timings : ["12:15 PM", "06:35 PM", "10:00 PM"],
 
-const theatreList = [
-    {
-        name :"INOX",
-        address : "Shipra Mall , gh",
-        timings : ["12:15 PM", "06:35 PM", "10:00 PM"],
-
-    },
-    {
-        name : "Cinepolis", 
-        address : "New Mall , gh",
-        timings : ["12:15 PM", "06:35 PM", "10:00 PM", "10:00 PM"],
-    },
-]
+//     },
+//     {
+//         name : "Cinepolis", 
+//         address : "New Mall , gh",
+//         timings : ["12:15 PM", "06:35 PM", "10:00 PM", "10:00 PM"],
+//     },
+// ]
 
 export default function TheatreTimeSelection({route, navigation}) {
-    const [selectedDate, setSelectedDate] = useState(0);
+    const [selectedDate, setSelectedDate] = useState("");
+    const [theatreList, setTheatreList] = useState([]);
+    const [cityId, setCityId] = useState(8);
+
+    useEffect(() => {
+        const fetchTheatres = async() =>{
+          const response = await GetTheatreList(cityId, route.params.movieItem.movieId, selectedDate);
+          
+          const temp = response.data;
+            // let finalTheatreList = [];
+
+            temp.map(async(field) =>{
+                let finalTheatreList = [];
+
+                    theatreId = 0;
+                    theatreName = "";
+                    address = "";
+                    timings = [];
+
+                    const temp = field.split(',');
+
+                    const showResponse = await GetShowsByTheatre(parseInt(temp[0]), route.params.movieItem.movieId, selectedDate);
+                    console.log("show response %$^%$^%^$",showResponse.data);
+                    timings = showResponse.data;
+
+                    finalTimings = [];
+
+                    timings.map(field => {
+                        let temp1 = field.split(',');
+                        let obj = {showId : temp1[0], timing:temp1[1]};
+                        finalTimings.push(obj);
+                    })
+
+                    finalTheatreList.push({
+                        theatreId : parseInt(temp[0]),
+                        theatreName : temp[1],
+                        address : temp[2],
+                        timings: finalTimings,
+                    });
+
+                    setTheatreList(finalTheatreList);
+                }
+            )
+          
+        //   console.log("Found Theatres sad : ", finalTheatreList);
+
+        //   setTheatreList(finalTheatreList);
+      }
+      fetchTheatres();
+    }, [selectedDate]);
 
     useEffect (() => {
-        navigation.setOptions({ headerTitle: route.params.movieName });
+        navigation.setOptions({ headerTitle: route.params.movieItem.title });
     }, []);
     
     const dateData = () => {
@@ -28,16 +77,24 @@ export default function TheatreTimeSelection({route, navigation}) {
             var now = new Date(Date.now() + i* 24 * 60 * 60 * 1000)
             var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
             var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-        
+            
             var day = days[ now.getDay()];
             var month = months[ now.getMonth() ];
             var date = now.getDate();
+            var year = now.getFullYear();
+
+            var dd = String(now. getDate()). padStart(2, '0');
+            var mm = String(now. getMonth() + 1). padStart(2, '0'); //January is 0!
+            var yyyy = now. getFullYear();
+            
+            ddmmyyyy = dd + '/' + mm + '/' + yyyy;
 
             dateArr.push({
                     id:i,
                     day:day,
                     date:date,
                     month:month,
+                    ddmmyyyy: ddmmyyyy,
                 })
         
         })
@@ -48,11 +105,11 @@ export default function TheatreTimeSelection({route, navigation}) {
         console.log(data);
         const obj = data.item;
         return (
-            <TouchableOpacity onPress={()=>setSelectedDate(obj.date)}>
+            <TouchableOpacity key = {obj.id} onPress={()=>setSelectedDate(obj.ddmmyyyy)}>
                 <View style = {{padding:15,
                                 justifyContent:"center",
                                 alignItems :"center",
-                                backgroundColor:(selectedDate==obj.date?"#f84464":"white"),
+                                backgroundColor:(selectedDate==obj.ddmmyyyy?"#f84464":"white"),
                                 }}>
                         <Text style = {{fontSize: 12,fontWeight: "light"}}>{obj.day.substring(0,3).toLocaleUpperCase()}</Text>
                         <Text style = {{fontSize: 20, fontWeight: "bold"}}>{obj.date}</Text>
@@ -65,9 +122,9 @@ export default function TheatreTimeSelection({route, navigation}) {
     const renderTheatre = (data) => {
         const obj = data.item;
         return (
-            <View style = {styles.theatreItem}>
+            <View key = {obj.theatreId} style = {styles.theatreItem}>
                 <View >
-                    <Text style = {{color:"black" , fontWeight: "bold"}}>{obj.name} : {obj.address}</Text>
+                    <Text style = {{color:"black" , fontWeight: "bold"}}>{obj.theatreName} : {obj.address}</Text>
                 </View>
 
                 <View>
@@ -77,13 +134,14 @@ export default function TheatreTimeSelection({route, navigation}) {
                     data={obj.timings}
                     renderItem={(data)=> {
                         const field = data.item;
-                        return (<TouchableOpacity onPress={()=>navigation.navigate("Seating")}
+                        
+                        return (<TouchableOpacity key = {field.showId} onPress={()=>navigation.navigate("Seating", {showId : field.showId , movieItem:route.params.movieItem})}
                                 style = {{borderWidth:1, width:80, padding:5, borderRadius:6, alignItems:'center', justifyContent:'center', margin:10}}>
-                                    <Text style ={{color:"green" ,fontWeight: "bold"}}>{field}</Text>
+                                    <Text style ={{color:"green" ,fontWeight: "bold"}}>{field.timing}</Text>
                                 </TouchableOpacity>
                         )
                     }}
-                    // keyExtractor={(item) => item.id}
+                    
                 />
                 </View>
             </View>
@@ -99,7 +157,7 @@ export default function TheatreTimeSelection({route, navigation}) {
                 horizontal
                 data={dateData()}
                 renderItem={renderDates}
-                keyExtractor={(item) => item.id}
+                
             />
         </View>
 
@@ -107,7 +165,7 @@ export default function TheatreTimeSelection({route, navigation}) {
             <FlatList
                 data = {theatreList}
                 renderItem={renderTheatre}
-                keyExtractor={(item) => item.id}
+                
             />
         </View>
 

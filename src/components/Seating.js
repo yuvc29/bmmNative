@@ -1,19 +1,34 @@
 import { Button, Image, StyleSheet, Text, TouchableOpacity, View , Modal, Dimensions, TextInput} from "react-native";
 import { useEffect, useState } from "react"
 
+import { GetSeatsbyShowId } from "../api/Seating";
+
 const { width } = Dimensions.get("window");
 
-const Seating = ({navigation}) => {
+const Seating = ({route, navigation}) => {
     const r= [0,1,2,3,4,5,6,7,8];
     const c= [0,1,2,3,4,5,6,7,8];
     const [enabledPaymentRedirect, setEnabledPaymentRedirect] = useState(false);
     const [selectedCount, setSelectedCount] = useState(0);
     const [isModalVisible, setModalVisible] = useState(true);
+    const [booked , setBooked] = useState([]);
+    const [authenticated, setAuthenticated] = useState(true);
     const [ticket, setTicket] = useState({
         seats :[],
-        seatCount:4,
+        seatCount:1,
         seatPrice : 100,
     })
+
+    useEffect(() => {
+        const fetchData = async() => {
+            let response = await GetSeatsbyShowId(route.params.showId);
+            const seatList = response.data;
+            console.log("Seat Lists", seatList);
+            setBooked(seatList);
+        }
+        fetchData();
+    }, [])
+    
     
     const onSelect = (index, cindex ) => {
         if(selectedCount >= ticket.seatCount){
@@ -48,10 +63,12 @@ const Seating = ({navigation}) => {
     }
 
     const isOccupied = (index, cindex) => {
-        // const ans = booked.find((book) => book.row == index && book.col == cindex)
-        // if(ans)
-        //     return true;
-        return false;
+        const temp = parseInt(index.toString() + cindex.toString());
+        console.log("booked ",booked,"temp", temp);
+        let ans= false;
+        booked.map((book) => ans|=(book.seatNo === temp && book.orderId!==null));
+        console.log("ans",ans);
+        return ans;
     }
 
     const isSelected = (index, cindex) => {
@@ -62,7 +79,7 @@ const Seating = ({navigation}) => {
     }
     
     const toggleModalVisibility = () => {
-        console.log("dsaddasdsadsdad");
+        console.log("Toggling Count Seat Modal");
         setModalVisible(!isModalVisible);
     };
 
@@ -102,7 +119,7 @@ const Seating = ({navigation}) => {
             }
             </View>
             {enabledPaymentRedirect?(
-                    <TouchableOpacity style = {styles.paymentBar} onPress = {() => navigation.navigate("PaymentPage")}> 
+                    <TouchableOpacity style = {styles.paymentBar} onPress = {() => {authenticated?navigation.navigate("PaymentPage"):navigation.navigate("Login")}}> 
                         <Text style = {{color:"white"}}>
                             Total         :            {selectedCount*ticket.seatPrice}
                         </Text>
