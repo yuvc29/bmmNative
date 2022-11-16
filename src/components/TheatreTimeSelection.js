@@ -5,14 +5,14 @@ import { GetTheatreList , GetShowsByTheatre} from '../api/GetTheatreList';
 //     {
 //         name :"INOX",
 //         address : "Shipra Mall , gh",
-//         timings : ["12:15 PM", "06:35 PM", "10:00 PM"],
+//         timings : [[1,"12:15 PM"], [2,"06:35 PM"], [3,"10:00 PM"]],
 
 //     },
 //     {
 //         name : "Cinepolis", 
 //         address : "New Mall , gh",
-//         timings : ["12:15 PM", "06:35 PM", "10:00 PM", "10:00 PM"],
-//     },
+//         timings : [[1,"12:15 PM"], [2,"06:35 PM"], [3,"10:00 PM"]],
+//     },data
 // ]
 
 export default function TheatreTimeSelection({route, navigation}) {
@@ -23,13 +23,11 @@ export default function TheatreTimeSelection({route, navigation}) {
     useEffect(() => {
         const fetchTheatres = async() =>{
           const response = await GetTheatreList(cityId, route.params.movieItem.movieId, selectedDate);
-          
           const temp = response.data;
-            // let finalTheatreList = [];
+            let finalTheatreList = [];
+            setTheatreList([]);
 
             temp.map(async(field) =>{
-                let finalTheatreList = [];
-
                     theatreId = 0;
                     theatreName = "";
                     address = "";
@@ -38,7 +36,7 @@ export default function TheatreTimeSelection({route, navigation}) {
                     const temp = field.split(',');
 
                     const showResponse = await GetShowsByTheatre(parseInt(temp[0]), route.params.movieItem.movieId, selectedDate);
-                    console.log("show response %$^%$^%^$",showResponse.data);
+                    console.log("show response %$^%$^%^$ for date",selectedDate," : ",showResponse.data);
                     timings = showResponse.data;
 
                     finalTimings = [];
@@ -59,10 +57,6 @@ export default function TheatreTimeSelection({route, navigation}) {
                     setTheatreList(finalTheatreList);
                 }
             )
-          
-        //   console.log("Found Theatres sad : ", finalTheatreList);
-
-        //   setTheatreList(finalTheatreList);
       }
       fetchTheatres();
     }, [selectedDate]);
@@ -71,6 +65,11 @@ export default function TheatreTimeSelection({route, navigation}) {
         navigation.setOptions({ headerTitle: route.params.movieItem.title });
     }, []);
     
+    const handleFinalClick = (obj, field) => {
+        console.log("Final Click", obj, field);
+        navigation.navigate("Seating", {movieItem:route.params.movieItem, theaterItem: obj, showItem : field, date : selectedDate});
+    }
+
     const dateData = () => {
         let dateArr = [];
         Array.from({length:7}).map(function(_, i){
@@ -102,7 +101,7 @@ export default function TheatreTimeSelection({route, navigation}) {
     }
 
     const renderDates = (data) => {
-        console.log(data);
+        // console.log(data);
         const obj = data.item;
         return (
             <TouchableOpacity key = {obj.id} onPress={()=>setSelectedDate(obj.ddmmyyyy)}>
@@ -135,7 +134,7 @@ export default function TheatreTimeSelection({route, navigation}) {
                     renderItem={(data)=> {
                         const field = data.item;
                         
-                        return (<TouchableOpacity key = {field.showId} onPress={()=>navigation.navigate("Seating", {showId : field.showId , movieItem:route.params.movieItem})}
+                        return (<TouchableOpacity key = {field.showId} onPress={()=>handleFinalClick(obj, field)} 
                                 style = {{borderWidth:1, width:80, padding:5, borderRadius:6, alignItems:'center', justifyContent:'center', margin:10}}>
                                     <Text style ={{color:"green" ,fontWeight: "bold"}}>{field.timing}</Text>
                                 </TouchableOpacity>

@@ -30,6 +30,7 @@ import MovieDetails from './src/components/MovieDetails';
 import Search from './src/components/Search';
 import Profile from './src/components/Profile';
 import Orders from './src/components/Orders';
+import Login from './src/components/Login';
 
  const Stack = createNativeStackNavigator();
  
@@ -124,6 +125,16 @@ import Orders from './src/components/Orders';
            }}
          />
  
+      <Stack.Screen
+           name = "Login"
+           component = {Login}
+           options={{ 
+             headerStyle: {
+               backgroundColor: '#333545',
+             },
+             headerTintColor: '#fff',
+           }}
+         />
        </Stack.Navigator>
      </NavigationContainer>
    );

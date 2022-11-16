@@ -24,6 +24,4 @@ const GetShowsByTheatre = async(theatreId, movieId, date) => {
 	}
 }
 
-
-
 export {GetTheatreList, GetShowsByTheatre};

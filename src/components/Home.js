@@ -31,7 +31,7 @@ export default function Home({navigation}) {
   useEffect(() => {
         const fetchMovieData = async() =>{
           const response = await getAllMovies();
-          console.log("Total Movies Items : ",response.data.length);
+          // console.log("Total Movies Items : ",response.data.length);
           setMovieList(response.data);
       }
       fetchMovieData();
@@ -147,7 +147,7 @@ export default function Home({navigation}) {
           {movieList.map(item => {
             return (
               <TouchableOpacity
-                // key={index}
+                key={item.movieId}
                 onPress={() =>
                   navigation.navigate('MovieDetails',{movieItem : item})
                 }>

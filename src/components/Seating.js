@@ -1,7 +1,7 @@
 import { Button, Image, StyleSheet, Text, TouchableOpacity, View , Modal, Dimensions, TextInput} from "react-native";
 import { useEffect, useState } from "react"
 
-import { GetSeatsbyShowId } from "../api/Seating";
+import { GetSeatsbyShowId, PostMyOrder, ReserveBookedSeats } from "../api/Seating";
 
 const { width } = Dimensions.get("window");
 
@@ -13,6 +13,10 @@ const Seating = ({route, navigation}) => {
     const [isModalVisible, setModalVisible] = useState(true);
     const [booked , setBooked] = useState([]);
     const [authenticated, setAuthenticated] = useState(true);
+    const [amount, setAmount ] = useState(0);
+    const [couponId, setCouponId] = useState(1);             // hard coded , change after coupon integration
+    
+
     const [ticket, setTicket] = useState({
         seats :[],
         seatCount:1,
@@ -20,8 +24,12 @@ const Seating = ({route, navigation}) => {
     })
 
     useEffect(() => {
+        setAmount(selectedCount*ticket.seatPrice);
+    }, [selectedCount])
+
+    useEffect(() => {
         const fetchData = async() => {
-            let response = await GetSeatsbyShowId(route.params.showId);
+            let response = await GetSeatsbyShowId( route.params.showItem.showId);
             const seatList = response.data;
             console.log("Seat Lists", seatList);
             setBooked(seatList);
@@ -29,7 +37,31 @@ const Seating = ({route, navigation}) => {
         fetchData();
     }, [])
     
-    
+    const handleSubmit = async() => {
+        // ReserveBookedSeats();                         //hold seats for some time
+        orderObj = {
+            showId:route.params.showId,
+            userId:329,                                 // hard Coded , have to change after log in integration
+            amount : amount,
+            couponId: couponId,
+            amountAfterDiscount : amount,  
+        }
+
+        const response = PostMyOrder(orderObj);
+        console.log("Order Post Response Status" ,(await response));
+        orderObj = (await response).data;
+        console.log("Order Post Response Data" ,orderObj);  
+
+        const seatList= [];
+
+        ticket.seats.map((seat)=> {
+            const temp = parseInt(seat.row.toString() + seat.col.toString());
+            seatList.push(temp);
+        })
+
+        (authenticated?navigation.navigate("PaymentPage", { seatList : seatList, ticket : ticket , orderObj: orderObj , movieItem:route.params.movieItem,  theaterItem: route.params.theaterItem, showItem : route.params.showItem, date : route.params.date}):navigation.navigate("Login"));
+    };
+
     const onSelect = (index, cindex ) => {
         if(selectedCount >= ticket.seatCount){
             return;
@@ -48,8 +80,6 @@ const Seating = ({route, navigation}) => {
         }   
 
         setSelectedCount(selectedCount+1);
-
-        
     }
 
     const unSelect = (index, cindex) => {
@@ -64,10 +94,9 @@ const Seating = ({route, navigation}) => {
 
     const isOccupied = (index, cindex) => {
         const temp = parseInt(index.toString() + cindex.toString());
-        console.log("booked ",booked,"temp", temp);
+        // console.log("booked ",booked,"temp", temp);
         let ans= false;
         booked.map((book) => ans|=(book.seatNo === temp && book.orderId!==null));
-        console.log("ans",ans);
         return ans;
     }
 
@@ -102,7 +131,6 @@ const Seating = ({route, navigation}) => {
                     <View key={index} style= {{flex:1}}>
                         {
                             c.map((cindex) => {
-                                console.log(index,cindex);
                                 return <View style = {{justifyContent:"space-evenly", margin:5}}>
                                     {
                                         isOccupied(index, cindex)
@@ -119,9 +147,9 @@ const Seating = ({route, navigation}) => {
             }
             </View>
             {enabledPaymentRedirect?(
-                    <TouchableOpacity style = {styles.paymentBar} onPress = {() => {authenticated?navigation.navigate("PaymentPage"):navigation.navigate("Login")}}> 
+                    <TouchableOpacity style = {styles.paymentBar} onPress = {() => {handleSubmit()}}> 
                         <Text style = {{color:"white"}}>
-                            Total         :            {selectedCount*ticket.seatPrice}
+                            Total         :            {amount}
                         </Text>
                     </TouchableOpacity> 
                 ):<></>}  

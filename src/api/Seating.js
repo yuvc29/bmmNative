@@ -12,6 +12,40 @@ const GetSeatsbyShowId = async(showId) => {
 	}
 }
 
+const ReserveBookedSeats = async(showId) => {
+	// try {
+	// 	let response =  await axios.get(`http://10.0.2.2:8080/seat/show/${showId}`);
+	// 	// console.log("******Shows***", response);
+	// 	return response;
+	// }
 
+	// catch (error) {
+	// 	console.log(error);
+	// }
+}
 
-export {GetSeatsbyShowId};
+const PostMyOrder = async(orderObj) => {
+	try {
+		let response =  await axios.post(`http://10.0.2.2:8080/order`, orderObj);
+		// console.log("******Shows***", response);
+		return response;
+	}
+
+	catch (error) {
+		console.log(error);
+	}
+}
+
+const PostBookedSeats = async(seatObj) => {
+	try {
+		let response =  await axios.post(`http://10.0.2.2:8080/seat`, seatObj);
+		// console.log("******Shows***", response);
+		return response;
+	}
+
+	catch (error) {
+		console.log(error);
+	}
+}
+
+export {GetSeatsbyShowId, ReserveBookedSeats, PostMyOrder, PostBookedSeats};
