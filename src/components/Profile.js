@@ -22,22 +22,22 @@ export default function Profile() {
   const [genderCheck, setGenderCheck] = useState(false);
   const [change, setChange] = useState(false);
 
-  // const handleSave = () => {
-  //   const fetchData = async () => {
-  //     const obj = {
-  //       firstName: firstName,
-  //       lastName: lastName,
-  //       dob: dob,
-  //       password: mobile,
-  //       email: email,
-  //       gender: gender,
-  //     };
-  //     console.log(obj);
-  //     const response = await UserSignup(obj);
-  //     console.log(response);
-  //   };
-  //   fetchData();
-  // };
+  const handleSave = () => {
+    const fetchData = async () => {
+      const obj = {
+        firstName: firstName,
+        lastName: lastName,
+        dob: dob,
+        password: mobile,
+        email: email,
+        gender: gender,
+      };
+      // console.log(obj);
+      const response = await UserSignup(obj);
+      // console.log(response);
+    };
+    fetchData();
+  };
 
   const handleSwitch = () => {
     setGenderCheck(!genderCheck);
