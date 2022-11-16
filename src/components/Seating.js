@@ -12,7 +12,7 @@ const Seating = ({route, navigation}) => {
     const [selectedCount, setSelectedCount] = useState(0);
     const [isModalVisible, setModalVisible] = useState(true);
     const [booked , setBooked] = useState([]);
-    const [authenticated, setAuthenticated] = useState(true);
+    const [authenticated, setAuthenticated] = useState(false);
     const [amount, setAmount ] = useState(0);
     const [couponId, setCouponId] = useState(1);             // hard coded , change after coupon integration
     
@@ -38,18 +38,21 @@ const Seating = ({route, navigation}) => {
     }, [])
     
     const handleSubmit = async() => {
+        // if(!authenticated){
+        //     navigation.navigate("Login");
+        // }
         // ReserveBookedSeats();                         //hold seats for some time
         orderObj = {
             showId:route.params.showId,
-            userId:329,                                 // hard Coded , have to change after log in integration
+            userId:route.params.userDetails.userId,                                 // hard Coded , have to change after log in integration
             amount : amount,
             couponId: couponId,
             amountAfterDiscount : amount,  
         }
 
-        const response = PostMyOrder(orderObj);
-        console.log("Order Post Response Status" ,(await response));
-        orderObj = (await response).data;
+        const response = await PostMyOrder(orderObj);
+        console.log("Order Post Response Status" ,response.status);
+        orderObj =  response.data;
         console.log("Order Post Response Data" ,orderObj);  
 
         const seatList= [];
@@ -59,7 +62,7 @@ const Seating = ({route, navigation}) => {
             seatList.push(temp);
         })
 
-        (authenticated?navigation.navigate("PaymentPage", { seatList : seatList, ticket : ticket , orderObj: orderObj , movieItem:route.params.movieItem,  theaterItem: route.params.theaterItem, showItem : route.params.showItem, date : route.params.date}):navigation.navigate("Login"));
+        navigation.navigate("PaymentPage", { seatList : seatList, ticket : ticket , orderObj: orderObj , movieItem:route.params.movieItem,  theaterItem: route.params.theaterItem, showItem : route.params.showItem, date : route.params.date, userDetails:route.params.userDetails});
     };
 
     const onSelect = (index, cindex ) => {

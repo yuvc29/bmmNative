@@ -67,7 +67,7 @@ export default function TheatreTimeSelection({route, navigation}) {
     
     const handleFinalClick = (obj, field) => {
         console.log("Final Click", obj, field);
-        navigation.navigate("Seating", {movieItem:route.params.movieItem, theaterItem: obj, showItem : field, date : selectedDate});
+        navigation.navigate("Seating", {movieItem:route.params.movieItem, theaterItem: obj, showItem : field, date : selectedDate,  userDetails:route.params.userDetails});
     }
 
     const dateData = () => {

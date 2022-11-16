@@ -28,7 +28,7 @@ export default function Ticket({route, navigation}) {
                             </View>
                             <View>
                             <Text>SEATS</Text>
-                            <Text>{route.params.seatList.map((seatNo) => (<Text>{seatNo}|</Text>))}</Text>
+                            <Text>{route.params.seatList.map((seatNo, index) => (<Text key = {index}>{seatNo}|</Text>))}</Text>
                             </View>
                     </View>
                 <Image style = {{width: 250, height: 250, alignSelf:"center"}}

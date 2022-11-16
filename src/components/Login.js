@@ -3,7 +3,7 @@ import {Button, TextInput, Text, View, StyleSheet} from 'react-native';
 import UserDetailsSchema from '../schema/UserDetailsSchema';
 import Realm from 'realm';
 
-import { postUserLogin } from '../api/Login';
+import { getUserDetailsByEmail, postUserLogin } from '../api/Login';
 
 export default function Login({navigation}) {
   
@@ -77,7 +77,9 @@ export default function Login({navigation}) {
     if(response.status == 200){
       console.log("Logged In");
       if(isNewUser)storeUserDetails();
-      // navigation.navigate('TodoPage');
+      const response = await getUserDetailsByEmail(email);
+      // console.log("User Details after Login: ", response.data);
+      navigation.navigate("Home", {userDetails: response.data});
     }else{
       console.log("Invalid Credentials");
       setLoginMessage("Invalid Credentials");

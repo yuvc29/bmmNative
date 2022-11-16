@@ -20,26 +20,20 @@ const postUserLogin = async (userData) => {
         console.error(error);
       }
     };
-  // import axios from "axios";
 
-  // function postUserLogin(userData) {
-  //   console.log("post");
-  //   var bodyFormData = new FormData();
-  //   bodyFormData.append('username', userData.username);
-  //   bodyFormData.append('password', userData.password);
-  //   var myHeader = new Headers();
-  //   myHeader.append('content-type', 'multipart/form-data');
-  //   try {
-  //     let response = axios({
-  //       method: "post",
-  //       url: "/login",
-  //       data: bodyFormData,
-  //       headers: myHeader,
-  //     })
-  //     return response;
-  //   } catch (error){
-  //     console.error(error);
-  //   }
-  // } 
 
-  export {postUserLogin};
+  import axios from "axios";
+
+  const getUserDetailsByEmail =async(email) => {
+    try {
+      let response =  await axios.get(`http://10.0.2.2:8080/user/email/${email}`);
+      // console.log("******Shows***", response);
+      return response;
+    }
+  
+    catch (error) {
+      console.log(error);
+    }
+  } 
+
+  export {postUserLogin, getUserDetailsByEmail};

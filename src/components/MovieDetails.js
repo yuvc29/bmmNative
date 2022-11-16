@@ -90,7 +90,7 @@ export default function MovieDetails({route,navigation}) {
         </View>
       </ScrollView>
       <View style={styles.button}>
-        <Button title="Book tickets" color="#f14c63" onPress={() => navigation.navigate("TheatreTimeSelection", {movieItem: route.params.movieItem})}/>
+        <Button title="Book tickets" color="#f14c63" onPress={() => navigation.navigate("TheatreTimeSelection", {movieItem: route.params.movieItem, userDetails:route.params.userDetails})}/>
       </View>
     </View>
   );

@@ -16,13 +16,12 @@ import {FlatListSlider} from 'react-native-flatlist-slider';
 import {searchIcon, homeLogo, order, profile} from '../assets';
 import MovieCard from './MovieCard';
 import {getAllMovies} from '../api/AllMovies';
-// navigation.navigate("Search")
 
 import data from './MovieData';
 import MovieDetails from './MovieDetails';
 import Picker from '@ouroboros/react-native-picker';
 
-export default function Home({navigation}) {
+export default function Home({route,navigation}) {
 
   const [movieList, setMovieList] = useState([]);
 
@@ -127,7 +126,7 @@ export default function Home({navigation}) {
               <TouchableOpacity
                 // key={index}
                 onPress={() =>
-                  navigation.navigate('MovieDetails',{movieItem : item})
+                  navigation.navigate('MovieDetails',{movieItem : item, userDetails:route.params.userDetails})
                 }>
                 <MovieCard
                   poster={item.poster}
@@ -149,7 +148,7 @@ export default function Home({navigation}) {
               <TouchableOpacity
                 key={item.movieId}
                 onPress={() =>
-                  navigation.navigate('MovieDetails',{movieItem : item})
+                  navigation.navigate('MovieDetails',{movieItem : item,  userDetails:route.params.userDetails})
                 }>
                 <MovieCard
                   poster={item.poster}

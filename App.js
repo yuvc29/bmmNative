@@ -39,7 +39,17 @@ import Login from './src/components/Login';
    return (
      <NavigationContainer>
        <Stack.Navigator>
-         
+       <Stack.Screen
+           name = "Login"
+           component = {Login}
+           options={{ 
+             headerStyle: {
+               backgroundColor: '#333545',
+             },
+             headerTintColor: '#fff',
+           }}
+         />
+
          <Stack.Screen name='Home' component={Home} options={{ 
             headerTitle: "BookMyMovie",
             headerShown:false,
@@ -125,16 +135,7 @@ import Login from './src/components/Login';
            }}
          />
  
-      <Stack.Screen
-           name = "Login"
-           component = {Login}
-           options={{ 
-             headerStyle: {
-               backgroundColor: '#333545',
-             },
-             headerTintColor: '#fff',
-           }}
-         />
+      
        </Stack.Navigator>
      </NavigationContainer>
    );

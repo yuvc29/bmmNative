@@ -24,7 +24,7 @@ export default function PaymentPage({route,navigation}) {
             name : name,
             cvv:cvv,
             expDate : expiry,
-            userId : 329,                    // user-Id hard coded
+            userId : route.params.userDetails.userId,                    // user-Id hard coded
         }
         const crrResponse = await PostCreditCard(cardObj);
         console.log("Credit Card Post Status", crrResponse.status);
@@ -48,7 +48,7 @@ export default function PaymentPage({route,navigation}) {
         })
 
         navigation.navigate("Ticket", {movieItem : route.params.movieItem , seatList: route.params.seatList, theaterItem:route.params.theaterItem, date : route.params.date,
-        } 
+            userDetails:route.params.userDetails} 
         );
     }
 
