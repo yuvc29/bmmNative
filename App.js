@@ -31,6 +31,7 @@ import Search from './src/components/Search';
 import Profile from './src/components/Profile';
 import Orders from './src/components/Orders';
 import Login from './src/components/Login';
+import Admin from './src/components/Admin';
 
  const Stack = createNativeStackNavigator();
  
@@ -82,6 +83,7 @@ import Login from './src/components/Login';
               },
               headerTintColor: '#fff',
             }}/>
+            
           <Stack.Screen name='Orders' component={Orders} options={{ 
             headerStyle: {
               backgroundColor: '#333545',
@@ -134,8 +136,17 @@ import Login from './src/components/Login';
              headerTintColor: '#fff',
            }}
          />
- 
-      
+
+        <Stack.Screen
+           name = "Admin"
+           component = {Admin}
+           options={{ 
+             headerStyle: {
+               backgroundColor: '#333545',
+             },
+             headerTintColor: '#fff',
+           }}
+         />
        </Stack.Navigator>
      </NavigationContainer>
    );

@@ -34,6 +34,7 @@ export default function Home({route,navigation}) {
           setMovieList(response.data);
       }
       fetchMovieData();
+      console.log("Role",route.params.userDetails.role);
   }, []);
   
 
@@ -160,26 +161,31 @@ export default function Home({route,navigation}) {
           })}
         </ScrollView>
       </ScrollView>
+
       <View style={styles.footer}>
-        <TouchableOpacity>
-          <Pressable style={styles.footerItem}>
+        {(route.params.userDetails.role=="admin")?
+          <TouchableOpacity style = {styles.footerItem} onPress={() => navigation.navigate('Admin')}>
             <Image source={homeLogo} style={styles.homeLogo} />
-            <Text>Home</Text>
-          </Pressable>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Orders')}>
-          <Pressable style={styles.footerItem}>
+              <Text>C-M-S</Text>
+          </TouchableOpacity>:<></>}
+        <TouchableOpacity  style={styles.footerItem} onPress={() => navigation.navigate('Orders')}>
+          {/* <Pressable style={styles.footerItem}> */}
             <Image source={order} style={styles.homeLogo} />
             <Text>Orders</Text>
-          </Pressable>
+          {/* </Pressable> */}
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-          <Pressable style={styles.footerItem}>
+
+        <TouchableOpacity style={styles.footerItem} onPress={() => navigation.navigate('Profile',{ userDetails:route.params.userDetails})}>
+          {/* <Pressable style={styles.footerItem}> */}
             <Image source={profile} style={styles.homeLogo} />
             <Text>Profile</Text>
-          </Pressable>
+          {/* </Pressable> */}
         </TouchableOpacity>
+
+          
+
       </View>
+
     </View>
   );
 }

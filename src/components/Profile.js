@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import Realm from 'realm';
 import {
   ScrollView,
   View,
@@ -11,37 +12,64 @@ import {
 } from 'react-native';
 import {UserSignup} from '../api/UserSignup'
 import {user} from '../assets';
+import UserDetailsSchema from '../schema/UserDetailsSchema';
 
-export default function Profile() {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [dob, setDob] = useState('');
-  const [mobile, setMobile] = useState('');
-  const [email, setEmail] = useState('');
-  const [gender, setGender] = useState('');
-  const [genderCheck, setGenderCheck] = useState(false);
+export default function Profile({route, navigation}) {
+  const [firstName, setFirstName] = useState(route.params.userDetails.firstName);
+  const [lastName, setLastName] = useState(route.params.userDetails.lastName);
+  const [dob, setDob] = useState(route.params.userDetails.dob);
+  const [mobile, setMobile] = useState("");
+  const [email, setEmail] = useState(route.params.userDetails.email);
+  const [gender, setGender] = useState(route.params.userDetails.gender);
+  const [genderCheck, setGenderCheck] = useState(route.params.userDetails.gender=="male"?true:false);
   const [change, setChange] = useState(false);
 
-  // const handleSave = () => {
-  //   const fetchData = async () => {
-  //     const obj = {
-  //       firstName: firstName,
-  //       lastName: lastName,
-  //       dob: dob,
-  //       password: mobile,
-  //       email: email,
-  //       gender: gender,
-  //     };
-  //     console.log(obj);
-  //     const response = await UserSignup(obj);
-  //     console.log(response);
-  //   };
-  //   fetchData();
-  // };
+  // useEffect(()=>{
+  //   setChange(!change);
+  // },[fields])
+
+  // const [fields, setFields] = useState({
+  //   firstName: '',
+  //       lastName: '',
+  //       dob: '',
+  //       password: '',
+  //       email: '',
+  //       gender: '',
+  // })
+
+  const handleSave = () => {
+    const fetchData = async () => {
+      const obj = {
+        firstName: firstName,
+        lastName: lastName,
+        dob: dob,
+        password: mobile,
+        email: email,
+        gender: gender,
+      };
+      // console.log(obj);
+      const response = await UserSignup(obj);
+      // console.log(response);
+    };
+    fetchData();
+  };
+
+  const handleSignOut = async() => {
+    const realm1 = await Realm.open({
+      path: "myrealm",
+      schema: [UserDetailsSchema],
+    });
+
+    realm1.write(() => {
+      realm1.deleteAll();
+      });
+
+    navigation.navigate("Login");
+   }
 
   const handleSwitch = () => {
     setGenderCheck(!genderCheck);
-    setGender(genderCheck ? 'Female' : 'Male');
+    setGender(genderCheck ? 'female' : 'male');
   };
 
   // const handleChange = () => {
@@ -64,7 +92,7 @@ export default function Profile() {
             onChange={text => {
               setMobile(text)
             }}
-          />
+            >{mobile}</TextInput>
           <Text style={styles.heading}>Email Address</Text>
           <TextInput
             style={styles.textInput}
@@ -73,8 +101,8 @@ export default function Profile() {
             placeholderTextColor="#AFB0B0"
             onChange={text => {
               setEmail(text)
-            }}
-          />
+            }}>{email}</TextInput>
+          
         </View>
         <View style={styles.bottom}>
           <Text style={styles.heading}>Personal Details</Text>
@@ -87,7 +115,7 @@ export default function Profile() {
               onChange={text => {
                 setFirstName(text)
               }}
-            />
+            >{firstName}</TextInput>
             <Text style={styles.fields}>Last Name</Text>
             <TextInput
               style={styles.textInput}
@@ -96,7 +124,7 @@ export default function Profile() {
               onChange={text => {
                 setLastName(text)
               }}
-            />
+              >{lastName}</TextInput>
             <Text style={styles.fields}>Birthday</Text>
             <TextInput
               style={styles.textInput}
@@ -106,7 +134,7 @@ export default function Profile() {
               onChange={text => {
                 setDob(text)
               }}
-            />
+              >{dob}</TextInput>
             <Text style={styles.fields}>Identity</Text>
           </View>
           <View style={styles.gender}>
@@ -121,14 +149,14 @@ export default function Profile() {
           </View>
         </View>
         <View style={styles.signout}>
-          <Button title="sign out" color="#f14c63" />
+          <Button onPress={handleSignOut} title="sign out" color="#f14c63" />
         </View>
       </ScrollView>
       <View>
         <Button
           title="Save Changes"
           color="#f14c63"
-          // disabled={change ? false : true}
+          disabled={change ? false : true}
           onPress={handleSave}
         />
       </View>
