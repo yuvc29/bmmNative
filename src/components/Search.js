@@ -15,7 +15,7 @@ import {clapperboard, loupe} from '../assets';
 export default function Search({route,navigation}) {
   
   const [data, setData] = useState([]);
-  const [display, setDisplay] = useState(false);
+  const [display, setDisplay] = useState(true);
   const [filterItem, setFilterItem] = useState(data);
   const [searchkey, setSearchKey] = useState('');
 
@@ -24,6 +24,7 @@ export default function Search({route,navigation}) {
       const response = await getAllMovies();
       console.log("Total Movies Items : ",response.data.length);
       setData(response.data);
+      setFilterItem(response.data);
     }
     fetchMovieData();
   }, []);

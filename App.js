@@ -38,6 +38,7 @@ import Admin from './src/components/Admin';
  const App= () => {
  
    return (
+    // <Admin/>
      <NavigationContainer>
        <Stack.Navigator>
        <Stack.Screen
@@ -83,7 +84,7 @@ import Admin from './src/components/Admin';
               },
               headerTintColor: '#fff',
             }}/>
-            
+
           <Stack.Screen name='Orders' component={Orders} options={{ 
             headerStyle: {
               backgroundColor: '#333545',

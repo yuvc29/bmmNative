@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useId, useState } from 'react';
 import {Button, TextInput, Text, View, StyleSheet} from 'react-native';
 import UserDetailsSchema from '../schema/UserDetailsSchema';
 import Realm from 'realm';
+import {useIsFocused} from '@react-navigation/native';
 
 import { getUserDetailsByEmail, postUserLogin } from '../api/Login';
 
@@ -32,7 +33,7 @@ export default function Login({navigation}) {
         
       renderUser();
       
-    }, []);
+    }, [useIsFocused()]);
 
   const storeUserDetails = async() => {
       const realm = await Realm.open({

@@ -14,6 +14,7 @@ import {
 import MultiSelect from 'react-native-multiple-select';
 import {PostMovie} from '../api/admin/PostMovie';
 import {PostShow} from '../api/admin/PostShow';
+import AddTheatre from './AddTheatre';
 
 export default function Admin() {
   const [addMovie, setAddMovie] = useState(false);
@@ -26,6 +27,7 @@ export default function Admin() {
   const [selectCity, setSelectCity] = useState('');
   const [selecttheater, setSelecttheater] = useState('');
   const [selectTiming, setSelectTiming] = useState('');
+
 
   const [movies, setMovies] = useState([]);
   const [city, setCity] = useState([]);
@@ -159,12 +161,10 @@ export default function Admin() {
 
   return (
     <View style={styles.admin}>
-      <Pressable onPress={() => setAddMovie(!addMovie)}>
-        <Text style={styles.add}>Add Movie</Text>
-      </Pressable>
+      <Button title='Add Movie' onPress={() => setAddMovie(!addMovie)}/>
       <Modal
         animationType="slide"
-        transparent={true}
+        // transparent={true}
         visible={addMovie}
         onRequestClose={!addMovie}>
         <ScrollView style={styles.form}>
@@ -265,15 +265,14 @@ export default function Admin() {
           />
 
           <Button title="Add" onPress={handleAddMovie} />
+          <Button title="Cancel" onPress={()=>setAddMovie(!addMovie)} />
         </ScrollView>
       </Modal>
 
-      <Pressable onPress={()=> setAddShow(!addShow)}>
-        <Text style={styles.add}>Add Show</Text>
-      </Pressable>
+      <Button title='Add Show' onPress={()=> setAddShow(!addShow)}/>
       <Modal
         animationType="slide"
-        transparent={true}
+        // transparent={true}
         visible={addShow}
         onRequestClose={!addShow}>
         <View style={styles.form}>
@@ -332,8 +331,11 @@ export default function Admin() {
             searchInputPlaceholderText="Select time"
           />
           <Button title="Add" onPress={handleAddShow} />
+          <Button title="Cancel" onPress={()=>setAddShow(!addShow)} />
         </View>
       </Modal>
+
+      <AddTheatre/>
     </View>
   );
 }
@@ -343,24 +345,16 @@ const screenWidth = Math.round(Dimensions.get('window').width);
 
 const styles = StyleSheet.create({
   admin: {
-    flex: 1,
+    // flex: 1,
     justifyContent: 'space-evenly',
     margin: 10,
     flexDirection: 'row',
     // alignItems: 'center',
   },
-  add: {
-    width: 140,
-    paddingHorizontal: 10,
-    fontSize: 25,
-    color: 'white',
-    borderRadius: 25,
-    backgroundColor: '#333545',
-  },
 
   form: {
-    marginTop: screenHeight*0.2,
-    width: screenWidth*0.8,
+    marginTop: screenHeight*0.05,
+    width: screenWidth*0.9,
     alignSelf:'center',
     elevation:5,
   },
