@@ -9,23 +9,22 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import { getAllMovies } from '../api/AllMovies';
+import {getAllMovies} from '../api/AllMovies';
 import {clapperboard, loupe} from '../assets';
 
-export default function Search({route,navigation}) {
-  
+export default function Search({route, navigation}) {
   const [data, setData] = useState([]);
   const [display, setDisplay] = useState(true);
   const [filterItem, setFilterItem] = useState(data);
   const [searchkey, setSearchKey] = useState('');
 
   useEffect(() => {
-    const fetchMovieData = async() =>{
+    const fetchMovieData = async () => {
       const response = await getAllMovies();
-      console.log("Total Movies Items : ",response.data.length);
+      console.log('Total Movies Items : ', response.data.length);
       setData(response.data);
       setFilterItem(response.data);
-    }
+    };
     fetchMovieData();
   }, []);
 
@@ -61,7 +60,9 @@ export default function Search({route,navigation}) {
           return (
             <TouchableOpacity
               key={item.movieId}
-              onPress={() => navigation.navigate('MovieDetails',{movieItem : item})}>
+              onPress={() =>
+                navigation.navigate('MovieDetails', {movieItem: item})
+              }>
               <View style={styles.list}>
                 <Text style={styles.titles}>{item.title}</Text>
                 <Image style={styles.icon} source={clapperboard} />
@@ -78,10 +79,10 @@ export default function Search({route,navigation}) {
 }
 
 const styles = StyleSheet.create({
-  searchBar:{
-    backgroundColor:'#333545',
-    paddingHorizontal:15,
-    paddingVertical:5,
+  searchBar: {
+    backgroundColor: '#333545',
+    paddingHorizontal: 15,
+    paddingVertical: 5,
   },
   searchBox: {
     // borderWidth: 1,
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
   },
 
   loupe: {
-    marginLeft:5,
+    marginLeft: 5,
     marginTop: 15,
     height: 20,
     width: 20,

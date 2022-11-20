@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const GetSeatsbyShowId = async(showId) => {
 	try {
-		let response =  await axios.get(`http://10.0.2.2:8080/seat/show/${showId}`);
+		let response =  await axios.get(`http://192.168.111.123:8080/seat/show/${showId}`);
 		// console.log("******Shows***", response);
 		return response;
 	}
@@ -14,7 +14,7 @@ const GetSeatsbyShowId = async(showId) => {
 
 const ReserveBookedSeats = async(showId) => {
 	// try {
-	// 	let response =  await axios.get(`http://10.0.2.2:8080/seat/show/${showId}`);
+	// 	let response =  await axios.get(`http://192.168.111.123:8080/seat/show/${showId}`);
 	// 	// console.log("******Shows***", response);
 	// 	return response;
 	// }
@@ -26,7 +26,7 @@ const ReserveBookedSeats = async(showId) => {
 
 const PostMyOrder = async(orderObj) => {
 	try {
-		let response =  await axios.post(`http://10.0.2.2:8080/order`, orderObj);
+		let response =  await axios.post(`http://192.168.111.123:8080/order`, orderObj);
 		// console.log("******Shows***", response);
 		return response;
 	}
@@ -38,7 +38,7 @@ const PostMyOrder = async(orderObj) => {
 
 const PostBookedSeats = async(seatObj) => {
 	try {
-		let response =  await axios.post(`http://10.0.2.2:8080/seat`, seatObj);
+		let response =  await axios.post(`http://192.168.111.123:8080/seat`, seatObj);
 		// console.log("******Shows***", response);
 		return response;
 	}

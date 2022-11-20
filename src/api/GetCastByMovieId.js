@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const GetCastByMovieId = async(movieId) => {
 	try {
-		let response =  await axios.get(`http://10.0.2.2:8080/actors/${movieId}`);
+		let response =  await axios.get(`http://192.168.111.123:8080/actors/${movieId}`);
 		// console.log("******GET***", response);
 		return response;
 	}

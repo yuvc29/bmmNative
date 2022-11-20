@@ -12,62 +12,80 @@ import {
 import MovieCard from './MovieCard';
 import data from './MovieData';
 
-import { GetCastByMovieId } from '../api/GetCastByMovieId';
+import {getAllMovies} from '../api/AllMovies';
+import {GetCastByMovieId} from '../api/GetCastByMovieId';
 
-export default function MovieDetails({route,navigation}) {
+export default function MovieDetails({route, navigation}) {
+  const [movieCast, setMovieCast] = useState([]);
+  const [movieList, setMovieList] = useState([]);
 
-  const [movieCast,setMovieCast] = useState([]);
-
-  useEffect (() => {
-    navigation.setOptions({ headerTitle: route.params.movieItem.title});
+  useEffect(() => {
+    const fetchMovieData = async () => {
+      const response = await getAllMovies();
+      // console.log("Total Movies Items : ",response.data.length);
+      setMovieList(response.data);
+    };
+    fetchMovieData();
+    // console.log("Role",route.params.userDetails.role);
   }, []);
 
   useEffect(() => {
-      const fetchMovieCast = async() =>{
-        const response = await GetCastByMovieId(route.params.movieItem.movieId);
-        
-        const temp = response.data;
-        finalCast = [];
-        temp.map((field) => {
-            firstName = "";
-            lastName = "";
-            poster = "";
-            movieId = "";
-            const temp = field.split(',');
-            finalCast.push({
-              movieId : temp[0],
-              firstName : temp[1],
-              lastName : temp[2],
-              poster: temp[3],
-            })
-        })
-        console.log("Total Movies Cast : ", finalCast);
-        setMovieCast(finalCast);
-    }
+    navigation.setOptions({headerTitle: route.params.movieItem.title});
+  }, []);
+
+  useEffect(() => {
+    const fetchMovieCast = async () => {
+      const response = await GetCastByMovieId(route.params.movieItem.movieId);
+
+      const temp = response.data;
+      finalCast = [];
+      temp.map(field => {
+        firstName = '';
+        lastName = '';
+        poster = '';
+        movieId = '';
+        const temp = field.split(',');
+        finalCast.push({
+          movieId: temp[0],
+          firstName: temp[1],
+          lastName: temp[2],
+          poster: temp[3],
+        });
+      });
+      // console.log('Total Movies Cast : ', finalCast);
+      setMovieCast(finalCast);
+    };
     fetchMovieCast();
   }, []);
 
-  const screenWidth = Math.round(Dimensions.get('window').width);
 
   return (
     <View style={styles.movieDetails}>
       <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
         <Image
-          source={{uri:route.params.movieItem.poster}}
+          source={{uri: route.params.movieItem.poster}}
           style={styles.image}
-          resizeMode = "contain"
+          resizeMode="contain"
         />
-        <Text>{route.params.movieItem.length} • {route.params.movieItem.rating} • {route.params.movieItem.format} • {route.params.movieItem.releaseDate}</Text>
+        <Text>
+          {route.params.movieItem.length} • {route.params.movieItem.rating} •{' '}
+          {route.params.movieItem.format} • {route.params.movieItem.releaseDate}
+        </Text>
         <Text>{route.params.movieItem.desc}</Text>
         <View style={styles.cast}>
           <Text style={styles.castText}>Cast</Text>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            {movieCast.map((field) => {
+            {movieCast.map(field => {
               // console.log("*****************",field.photo);
               return (
                 <View key={field.castId} style={styles.castCard}>
-                  <Image source={{uri: field.image}} style={styles.castImage} />
-                  <Text style={styles.castText}>{field.firstName +" " +field.lastName}</Text>
+                  <Image
+                    source={{uri: field.poster}}
+                    style={styles.castImage}
+                  />
+                  <Text style={styles.castText}>
+                    {field.firstName + ' ' + field.lastName}
+                  </Text>
                 </View>
               );
             })}
@@ -75,22 +93,32 @@ export default function MovieDetails({route,navigation}) {
         </View>
         <View>
           <Text style={styles.castText}>You might also like</Text>
-          {/* <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            {data.map((item, index) => {
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+            {movieList.map(item => {
               return (
-                <TouchableOpacity key={index} onPress={()=> navigation.navigate('MovieDetails',{title:item.title, poster:item.poster})}>
+                <TouchableOpacity key={item.movieId}>
                   <MovieCard
                     poster={item.poster}
                     title={item.title}
+                    format={item.format}
                   />
                 </TouchableOpacity>
               );
             })}
-          </ScrollView> */}
+          </ScrollView>
         </View>
       </ScrollView>
       <View style={styles.button}>
-        <Button title="Book tickets" color="#f14c63" onPress={() => navigation.navigate("TheatreTimeSelection", {movieItem: route.params.movieItem, userDetails:route.params.userDetails})}/>
+        <Button
+          title="Book tickets"
+          color="#f14c63"
+          onPress={() =>
+            navigation.navigate('TheatreTimeSelection', {
+              movieItem: route.params.movieItem,
+              userDetails: route.params.userDetails,
+            })
+          }
+        />
       </View>
     </View>
   );
@@ -108,16 +136,16 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   cast: {
-    marginVertical:10,
-    borderTopColor:'#C9C9C9',
-    borderBottomColor:'#C9C9C9',
+    marginVertical: 10,
+    borderTopColor: '#C9C9C9',
+    borderBottomColor: '#C9C9C9',
     borderTopWidth: 1,
     borderBottomWidth: 1,
   },
-  castText:{
-    fontSize:18,
+  castText: {
+    fontSize: 18,
     // fontWeight:'10',
-    color:'black'
+    color: 'black',
   },
   image: {
     // marginLeft:5,
@@ -130,13 +158,12 @@ const styles = StyleSheet.create({
     width: 100,
     borderRadius: 60,
   },
-  castCard:{
-    marginRight:20,
+  castCard: {
+    marginRight: 20,
   },
   button: {
     // backgroundColor:'black',
     flex: 0.06,
     margin: 10,
   },
-
 });

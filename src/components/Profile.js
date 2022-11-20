@@ -21,7 +21,7 @@ export default function Profile({route, navigation}) {
   const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState(route.params.userDetails.email);
   const [gender, setGender] = useState(route.params.userDetails.gender);
-  const [genderCheck, setGenderCheck] = useState(route.params.userDetails.gender=="male"?true:false);
+  const [genderCheck, setGenderCheck] = useState(route.params.userDetails.gender=="female"?true:false);
   const [change, setChange] = useState(false);
 
   // useEffect(()=>{

@@ -1,5 +1,5 @@
 import React, { useEffect, useId, useState } from 'react';
-import {Button, TextInput, Text, View, StyleSheet} from 'react-native';
+import {Button, TextInput, Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import UserDetailsSchema from '../schema/UserDetailsSchema';
 import Realm from 'realm';
 import {useIsFocused} from '@react-navigation/native';
@@ -114,6 +114,15 @@ export default function Login({navigation}) {
           onChangeText={setPassword}
         />
       </View>
+      <View style = {{justifyContent:'center', paddingTop:5, flexDirection:'row'}}>
+              <Text>New User? </Text>
+              
+              <TouchableOpacity onPress = {() => navigation.navigate("SignUp")}>
+                <Text  style = {{ fontWeight:'bold', color:'purple'}}>SignUp</Text>
+              </TouchableOpacity>
+            
+              
+            </View>
       {loginMessage.length>0?<Text style = {styles.redAlert}>{loginMessage}</Text>:<></>}
       <View style={styles.button}>
         <Button title="Login" color="#f14c63" onPress = {() => checkAuthorizedUserAndNavigate(email, password, true)}/>

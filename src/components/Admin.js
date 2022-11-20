@@ -15,6 +15,7 @@ import MultiSelect from 'react-native-multiple-select';
 import {PostMovie} from '../api/admin/PostMovie';
 import {PostShow} from '../api/admin/PostShow';
 import AddTheatre from './AddTheatre';
+import {PostCast} from '../api/admin/PostCast';
 
 export default function Admin() {
   const [addMovie, setAddMovie] = useState(false);
@@ -28,15 +29,18 @@ export default function Admin() {
   const [selecttheater, setSelecttheater] = useState('');
   const [selectTiming, setSelectTiming] = useState('');
 
+  const [addCast, setAddCast] = useState(false);
+  const [cast, setCast] = useState([]);
 
   const [movies, setMovies] = useState([]);
   const [city, setCity] = useState([]);
   const [theater, settheater] = useState([]);
+  const [actor, setActor] = useState([]);
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await axios.get('http://10.0.2.2:8080/movie');
+        const response = await axios.get('http://192.168.111.123:8080/movie');
         // console.log("responseData for movi List", response.data);
         setMovies(response.data);
       } catch (error) {
@@ -47,7 +51,7 @@ export default function Admin() {
 
     const fetchCity = async () => {
       try {
-        const response = await axios.get('http://10.0.2.2:8080/city');
+        const response = await axios.get('http://192.168.111.123:8080/city');
         // console.log("responseData for city List", response.data);
         setCity(response.data);
       } catch (error) {
@@ -57,44 +61,40 @@ export default function Admin() {
     fetchCity();
   }, [addShow]);
 
-  useEffect ( () => {
+  useEffect(() => {
     const fetchtheater = async () => {
-        try {
-        let id=-1;
+      try {
+        let id = -1;
         city.map(item => {
-            if (item.name == selectCity) id = item.cityId;
+          if (item.name == selectCity) id = item.cityId;
         });
-        if(id==-1)return;
-          console.log("City Id is :",id);
+        if (id == -1) return;
+        console.log('City Id is :', id);
         const response = await axios.get(
-            `http://10.0.2.2:8080/theater/city/${id}`,
+          `http://192.168.111.123:8080/theater/city/${id}`,
         );
         console.log('responseData for theater List', response.data);
         settheater(response.data);
-        } catch (error) {
+      } catch (error) {
         console.log(error);
-        }
-    }
+      }
+    };
     fetchtheater();
-    }, [selectCity]);
+  }, [selectCity]);
 
-    
+  useEffect(() => {
+    let movieId = -1;
+    movies.map(item => {
+      if (item.title == selectMovie) movieId = item.movieId;
+    });
+    if (movieId !== -1) setShowFields({...showFields, movieId: movieId});
 
-    useEffect ( () => {
-            let movieId=-1;
-            movies.map(item => {
-                if (item.title == selectMovie) movieId = item.movieId;
-            });
-            if(movieId!==-1)setShowFields({...showFields , movieId : movieId});
-                
-            let theaterId=-1;
-            theater.map(item => {
-                if (item.name == selecttheater) theaterId = item.theaterId;
-            });
-            if(theaterId!==-1)setShowFields({...showFields , theaterId : theaterId});
-            
-        }, [selectMovie, selecttheater]);
-
+    let theaterId = -1;
+    theater.map(item => {
+      if (item.name == selecttheater) theaterId = item.theaterId;
+    });
+    if (theaterId !== -1) setShowFields({...showFields, theaterId: theaterId});
+  }, [selectMovie, selecttheater]);
 
   const [fields, setFields] = useState({
     title: '',
@@ -108,14 +108,15 @@ export default function Admin() {
     format: '',
     poster: '',
     description: '',
+    // cast:[]
   });
 
   const [showFields, setShowFields] = useState({
-    date:"",
-    movieId:0,
-    theaterId:0,
-    timing: ""
-})
+    date: '',
+    movieId: 0,
+    theaterId: 0,
+    timing: '',
+  });
 
   const languages = [
     {language: 'Hindi'},
@@ -130,6 +131,16 @@ export default function Admin() {
     {time: '20:00 - 22:00'},
     {time: '11:00 - 13:00'},
   ];
+
+  const GetAllActors = async () => {
+    try {
+      let response = await axios.get(`http://192.168.111.123:8080/actor`);
+      console.log(response.data);
+      setActor(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleAddMovie = () => {
     setAddMovie(!addMovie);
@@ -147,21 +158,40 @@ export default function Admin() {
     postShow();
   };
 
-  let movieId;
-  movies.map((item)=>{
-    if(selectMovie==item.title)
-    movieId=item.movieId;
-  })
+  const handleAddCast = () => {
+    setAddCast(!addCast);
+    cast.map(async field => {
+      let actorId = -1;
+      actor.map(item => {
+        if (item.firstName == field) actorId = item.actorId;
+      });
+      if (actorId == -1) {
+        console.log('No actor found');
+        return;
+      }
+      const response = await PostCast(movieId, actorId);
+      console.log('Adding Cast', response.status);
+    });
+  };
 
-  let theaterId;
-  theater.map((item)=>{
-    if(selecttheater==item.name)
-    theaterId=item.movieId;
-  })
+  // let movieId;
+  // movies.map(item => {
+  //   if (selectMovie == item.title) movieId = item.movieId;
+  // });
+
+  // let theaterId;
+  // theater.map(item => {
+  //   if (selecttheater == item.name) theaterId = item.theaterId;
+  // });
 
   return (
     <View style={styles.admin}>
-      <Button title='Add Movie' onPress={() => setAddMovie(!addMovie)}/>
+      <Button
+        title="Add Movie"
+        onPress={() => {
+          setAddMovie(!addMovie), GetAllActors();
+        }}
+      />
       <Modal
         animationType="slide"
         // transparent={true}
@@ -219,7 +249,7 @@ export default function Admin() {
             hideTags
             items={languages}
             onSelectedItemsChange={item => {
-                console.log("Multiselect Item:", item[0]);
+              console.log('Multiselect Item:', item[0]);
               setSelectedLanguage(item[0]);
               setFields({...fields, language: item[0]});
             }}
@@ -249,6 +279,14 @@ export default function Admin() {
             uniqueKey={'format'}
             displayKey="format"
           />
+          {/* <Text>Select Cast: {fields.cast.toString()}</Text>
+          <MultiSelect
+            // hideTags
+            items={actor}
+            uniqueKey="firstName"
+            displayKey="firstName"
+            onSelectedItemsChange={(item)=>call(item)}
+          /> */}
           <Text>Poster</Text>
           <TextInput
             style={styles.textInput}
@@ -265,11 +303,11 @@ export default function Admin() {
           />
 
           <Button title="Add" onPress={handleAddMovie} />
-          <Button title="Cancel" onPress={()=>setAddMovie(!addMovie)} />
+          <Button title="Cancel" onPress={() => setAddMovie(!addMovie)} />
         </ScrollView>
       </Modal>
 
-      <Button title='Add Show' onPress={()=> setAddShow(!addShow)}/>
+      <Button title="Add Show" onPress={() => setAddShow(!addShow)} />
       <Modal
         animationType="slide"
         // transparent={true}
@@ -282,7 +320,7 @@ export default function Admin() {
             keyboardType="phone-pad"
             placeholder="Enter show date"
             placeholderTextColor="#AFB0B0"
-            onChangeText={text=> setShowFields({...showFields, date:text})}
+            onChangeText={text => setShowFields({...showFields, date: text})}
           />
           <Text>Select Movie: {selectMovie}</Text>
           <MultiSelect
@@ -300,7 +338,7 @@ export default function Admin() {
             hideTags
             items={city}
             onSelectedItemsChange={item => {
-                console.log(item);
+              console.log(item);
               setSelectCity(item[0]);
             }}
             uniqueKey={'name'}
@@ -324,18 +362,55 @@ export default function Admin() {
             items={timings}
             onSelectedItemsChange={item => {
               setSelectTiming(item[0]);
-              setShowFields({...showFields,timing:item[0]})
+              setShowFields({...showFields, timing: item[0]});
             }}
             uniqueKey={'time'}
             displayKey="time"
             searchInputPlaceholderText="Select time"
           />
           <Button title="Add" onPress={handleAddShow} />
-          <Button title="Cancel" onPress={()=>setAddShow(!addShow)} />
+          <Button title="Cancel" onPress={() => setAddShow(!addShow)} />
         </View>
       </Modal>
 
-      <AddTheatre/>
+      <AddTheatre />
+
+      <Button
+        title="Add Cast"
+        onPress={() => {
+          setAddCast(!addCast);
+          GetAllActors();
+        }}
+      />
+      <Modal
+        animationType="slide"
+        // transparent={true}
+        visible={addCast}
+        onRequestClose={!addCast}>
+        <View style={styles.form}>
+          <Text>Select Movie: {selectMovie}</Text>
+          <MultiSelect
+            hideTags
+            items={movies}
+            onSelectedItemsChange={item => {
+              setSelectMovie(item[0]);
+            }}
+            uniqueKey={'title'}
+            displayKey="title"
+            searchInputPlaceholderText="Search Movies"
+          />
+          <Text>Select Actors: {cast.toString()}</Text>
+          <MultiSelect
+            // hideTags
+            items={actor}
+            uniqueKey="firstName"
+            displayKey="firstName"
+            onSelectedItemsChange={item => setCast([...cast, item[0]])}
+          />
+          <Button title="Add" onPress={handleAddCast} />
+          <Button title="Cancel" onPress={() => setAddCast(!addCast)} />
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -353,9 +428,9 @@ const styles = StyleSheet.create({
   },
 
   form: {
-    marginTop: screenHeight*0.05,
-    width: screenWidth*0.9,
-    alignSelf:'center',
-    elevation:5,
+    marginTop: screenHeight * 0.05,
+    width: screenWidth * 0.9,
+    alignSelf: 'center',
+    elevation: 5,
   },
 });

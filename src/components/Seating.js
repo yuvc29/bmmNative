@@ -165,6 +165,7 @@ const Seating = ({route, navigation}) => {
                 <View style={styles.viewWrapper}>
                     <View style={styles.modalView}>
                         <TextInput placeholder="Enter no of Seats" 
+                                    keyboardType="numeric"
                                     value={ticket.seatCount} style={styles.textInput} 
                                     onChangeText={(value) => setTicket({...ticket, seatCount: value})} />
 

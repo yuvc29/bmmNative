@@ -16,9 +16,6 @@ import {FlatListSlider} from 'react-native-flatlist-slider';
 import {searchIcon, homeLogo, order, profile} from '../assets';
 import MovieCard from './MovieCard';
 import {getAllMovies} from '../api/AllMovies';
-
-import data from './MovieData';
-import MovieDetails from './MovieDetails';
 import Picker from '@ouroboros/react-native-picker';
 
 export default function Home({route,navigation}) {
@@ -82,7 +79,7 @@ export default function Home({route,navigation}) {
     <View style={styles.homeContainer}>
       <View style={styles.navBar}>
         <View style={styles.navTop}>
-          <Text style={styles.heading}>It All Starts Here</Text>
+          <Text style={styles.heading}>Hello {route.params.userDetails.firstName} !</Text>
           <TouchableOpacity onPress={handleSearch}>
             <Image source={searchIcon} style={styles.icon} />
           </TouchableOpacity>
@@ -144,7 +141,7 @@ export default function Home({route,navigation}) {
         </View>
 
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          {movieList.map(item => {
+          {movieList.slice().reverse().map(item => {
             return (
               <TouchableOpacity
                 key={item.movieId}
@@ -245,7 +242,7 @@ const styles = StyleSheet.create({
   },
 
   icon: {
-    marginLeft: 100,
+    marginLeft: 140,
     marginTop: 10,
     width: 40,
     height: 40,

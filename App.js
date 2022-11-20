@@ -32,6 +32,7 @@ import Profile from './src/components/Profile';
 import Orders from './src/components/Orders';
 import Login from './src/components/Login';
 import Admin from './src/components/Admin';
+import SignUp from './src/components/SignUp';
 
  const Stack = createNativeStackNavigator();
  
@@ -44,6 +45,16 @@ import Admin from './src/components/Admin';
        <Stack.Screen
            name = "Login"
            component = {Login}
+           options={{ 
+             headerStyle: {
+               backgroundColor: '#333545',
+             },
+             headerTintColor: '#fff',
+           }}
+         />
+         <Stack.Screen
+           name = "SignUp"
+           component = {SignUp}
            options={{ 
              headerStyle: {
                backgroundColor: '#333545',
@@ -120,6 +131,7 @@ import Admin from './src/components/Admin';
            name = "PaymentPage"
            component = {PaymentPage}
            options={{ 
+             headerTitle: "Enter Card Details",
              headerStyle: {
                backgroundColor: '#333545',
              },
