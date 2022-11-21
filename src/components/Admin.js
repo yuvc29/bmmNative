@@ -37,10 +37,12 @@ export default function Admin() {
   const [theater, settheater] = useState([]);
   const [actor, setActor] = useState([]);
 
+  //server_url
+
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await axios.get('http://192.168.111.123:8080/movie');
+        const response = await axios.get(`${server_url}/movie`);
         // console.log("responseData for movi List", response.data);
         setMovies(response.data);
       } catch (error) {
@@ -51,7 +53,7 @@ export default function Admin() {
 
     const fetchCity = async () => {
       try {
-        const response = await axios.get('http://192.168.111.123:8080/city');
+        const response = await axios.get(`${server_url}/city`);
         // console.log("responseData for city List", response.data);
         setCity(response.data);
       } catch (error) {
@@ -71,7 +73,7 @@ export default function Admin() {
         if (id == -1) return;
         console.log('City Id is :', id);
         const response = await axios.get(
-          `http://192.168.111.123:8080/theater/city/${id}`,
+          `${server_url}/theater/city/${id}`,
         );
         console.log('responseData for theater List', response.data);
         settheater(response.data);
@@ -134,7 +136,7 @@ export default function Admin() {
 
   const GetAllActors = async () => {
     try {
-      let response = await axios.get(`http://192.168.111.123:8080/actor`);
+      let response = await axios.get(`${server_url}/actor`);
       console.log(response.data);
       setActor(response.data);
     } catch (error) {

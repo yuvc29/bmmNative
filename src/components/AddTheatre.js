@@ -30,7 +30,7 @@ export default function AddTheater() {
     setAddTheater(!addTheater);
     const fetchCity = async () => {
       try {
-        const response = await axios.get('http://192.168.111.123:8080/city');
+        const response = await axios.get('${server_url}/city');
         // console.log("responseData for city List", response.data);
         setCity(response.data);
       } catch (error) {

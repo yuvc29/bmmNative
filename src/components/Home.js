@@ -165,7 +165,7 @@ export default function Home({route,navigation}) {
             <Image source={homeLogo} style={styles.homeLogo} />
               <Text>C-M-S</Text>
           </TouchableOpacity>:<></>}
-        <TouchableOpacity  style={styles.footerItem} onPress={() => navigation.navigate('Orders')}>
+        <TouchableOpacity  style={styles.footerItem} onPress={() => navigation.navigate('Orders', {userDetails:route.params.userDetails})}>
           {/* <Pressable style={styles.footerItem}> */}
             <Image source={order} style={styles.homeLogo} />
             <Text>Orders</Text>

@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const GetCardByUserId = async(userId) => {
+const GetActorList = async() => {
 	try {
-		let response =  await axios.get(`${server_url}/card/user/${userId}`);
+		let response =  await axios.get(`${server_url}/actor`);
 		// console.log("******GET***", response);
 		return response;
 	}
@@ -12,4 +12,4 @@ const GetCardByUserId = async(userId) => {
 	}
 }
 
-export {GetCardByUserId};
+export {GetActorList};

@@ -24,6 +24,7 @@ export default function TheatreTimeSelection({route, navigation}) {
         const fetchTheatres = async() =>{
           const response = await GetTheatreList(cityId, route.params.movieItem.movieId, selectedDate);
           const temp = response.data;
+          console.log("theater List:" ,temp);
             let finalTheatreList = [];
             setTheatreList([]);
 

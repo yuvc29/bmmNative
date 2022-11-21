@@ -1,7 +1,7 @@
 import axios from "axios";
 const getAllMovies = async() => {
 	try {
-		let response =  await axios.get("http://192.168.111.123:8080/movie");
+		let response =  await axios.get(`${server_url}/movie`);
 		// console.log("******GET***", response);
 		return response;
 	}

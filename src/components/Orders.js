@@ -1,8 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {FlatList, Image, StyleSheet, View, Text} from 'react-native';
+import { getOrdersByUserId } from '../api/GetOrdersByUserId';
 import data from './MovieData'
 
-export default function Orders() {
+export default function Orders({route, navigation}) {
+
+  useEffect(() => {
+   const fetchOrders = async() => {
+    const response = await getOrdersByUserId(route.params.userDetails.userId);
+    console.log("Orders by User Id :",response.data);
+  }
+  fetchOrders();
+  }, [])
+  
+
 const item = ({item})=>{
     return(
         <View key={item.movieId} style={styles.ticket}>

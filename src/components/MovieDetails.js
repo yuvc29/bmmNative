@@ -124,6 +124,7 @@ export default function MovieDetails({route, navigation}) {
   );
 }
 
+
 const styles = StyleSheet.create({
   movieDetails: {
     paddingHorizontal: 15,

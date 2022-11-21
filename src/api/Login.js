@@ -2,7 +2,7 @@ const postUserLogin = async (userData) => {
     // const csrfToken = document.cookie.replace(/(?:(?:^|.*;\s*)XSRF-TOKEN\s*\=\s*([^;]*).*$)|^.*$/, '$1');
       try {
           let response = await fetch(
-          `http://192.168.111.123:8080/login?username=${userData.username}&password=${userData.password}` ,
+          `${server_url}/login?username=${userData.username}&password=${userData.password}` ,
           // {headers: { 'X-XSRF-TOKEN': csrfToken },},
           {
               method: 'POST',
@@ -26,7 +26,7 @@ const postUserLogin = async (userData) => {
 
   const getUserDetailsByEmail =async(email) => {
     try {
-      let response =  await axios.get(`http://192.168.111.123:8080/user/email/${email}`);
+      let response =  await axios.get(`${server_url}/user/email?email=${email}`);
       // console.log("******Shows***", response);
       return response;
     }

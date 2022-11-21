@@ -3,7 +3,6 @@ import {Button, TextInput, Text, View, StyleSheet, TouchableOpacity} from 'react
 import UserDetailsSchema from '../schema/UserDetailsSchema';
 import Realm from 'realm';
 import {useIsFocused} from '@react-navigation/native';
-
 import { getUserDetailsByEmail, postUserLogin } from '../api/Login';
 
 export default function Login({navigation}) {
@@ -24,6 +23,7 @@ export default function Login({navigation}) {
       userList = realm.objects("userDetailsNew");
       
       console.log("found userList :" , userList);
+
         if(userList.length > 0){
           checkAuthorizedUserAndNavigate(userList[0].email, userList[0].password, false);
         }else{

@@ -43,7 +43,7 @@ const Seating = ({route, navigation}) => {
         // }
         // ReserveBookedSeats();                         //hold seats for some time
         orderObj = {
-            showId:route.params.showId,
+            showId:route.params.showItem.showId,
             userId:route.params.userDetails.userId,                                 // hard Coded , have to change after log in integration
             amount : amount,
             couponId: couponId,
@@ -51,7 +51,7 @@ const Seating = ({route, navigation}) => {
         }
 
         const response = await PostMyOrder(orderObj);
-        console.log("Order Post Response Status" ,response.status);
+        console.log("Order Post Response" ,response);
         orderObj =  response.data;
         console.log("Order Post Response Data" ,orderObj);  
 
