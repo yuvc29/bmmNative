@@ -18,7 +18,7 @@ import { GetTheatreList , GetShowsByTheatre} from '../api/GetTheatreList';
 export default function TheatreTimeSelection({route, navigation}) {
     const [selectedDate, setSelectedDate] = useState("");
     const [theatreList, setTheatreList] = useState([]);
-    const [cityId, setCityId] = useState(8);
+    const [cityId, setCityId] = useState(route.params.cityId);
 
     useEffect(() => {
         const fetchTheatres = async() =>{

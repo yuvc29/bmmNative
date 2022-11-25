@@ -80,6 +80,8 @@ export default function Login({navigation}) {
       if(isNewUser)storeUserDetails();
       const response = await getUserDetailsByEmail(email);
       // console.log("User Details after Login: ", response.data);
+      // server_url+=('/'+response.data.role);
+      console.log("Server Url", server_url);
       navigation.navigate("Home", {userDetails: response.data});
     }else{
       console.log("Invalid Credentials");

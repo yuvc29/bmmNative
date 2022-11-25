@@ -61,7 +61,7 @@ export default function Search({route, navigation}) {
             <TouchableOpacity
               key={item.movieId}
               onPress={() =>
-                navigation.navigate('MovieDetails', {movieItem: item})
+                navigation.navigate('MovieDetails', {movieItem: item, userDetails:route.params.userDetails, cityId : route.params.cityId}) 
               }>
               <View style={styles.list}>
                 <Text style={styles.titles}>{item.title}</Text>

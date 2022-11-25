@@ -17,13 +17,37 @@ import {searchIcon, homeLogo, order, profile} from '../assets';
 import MovieCard from './MovieCard';
 import {getAllMovies} from '../api/AllMovies';
 import Picker from '@ouroboros/react-native-picker';
+import axios from 'axios';
 
 export default function Home({route,navigation}) {
 
   const [movieList, setMovieList] = useState([]);
+  const [cityId, setCityId] = useState(8);
+  const [cityList , setCityList] = useState([]);
 
   const screenWidth = Math.round(Dimensions.get('window').width);
-  
+
+  useEffect(() => {
+    const fetchCity = async () => {
+      try {
+        const response = await axios.get(`${server_url}/city`);
+        const temp = response.data;
+        let finalCityList= [];
+        temp.map((field) => {
+          obj = {
+            value : field.cityId,
+            text: field.name,
+          }
+          finalCityList.push(obj);
+        })
+        setCityList(finalCityList);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchCity();
+  }, []);
+
   useEffect(() => {
         const fetchMovieData = async() =>{
           const response = await getAllMovies();
@@ -35,10 +59,10 @@ export default function Home({route,navigation}) {
   }, []);
   
 
-  let [city, setCity] = useState('DEL');
+  
 
   const handleSearch = () => {
-    navigation.navigate('Search');
+    navigation.navigate('Search' ,{userDetails:route.params.userDetails, cityId : cityId});
   };
 
   const ads = [
@@ -64,17 +88,6 @@ export default function Home({route,navigation}) {
     },
   ];
 
-  const Cities = [
-    {value: 'DEL', text: 'Delhi-NCR'},
-    {value: 'MUM', text: 'Mumbai'},
-    {value: 'BGR', text: 'Bangaluru'},
-    {value: 'HYD', text: 'Hyderabad'},
-    {value: 'ABD', text: 'Ahmedabad'},
-    {value: 'CG', text: 'Chandigarh'},
-    {value: 'CHN', text: 'Chennai'},
-    {value: 'KKR', text: 'Kolkata'},
-  ];
-
   return (
     <View style={styles.homeContainer}>
       <View style={styles.navBar}>
@@ -87,15 +100,15 @@ export default function Home({route,navigation}) {
         <Pressable>
           <Picker
           
-            onChanged={setCity}
-            options={Cities}
+            onChanged={setCityId}
+            options={cityList}
             style={{
               marginLeft: 10,
               color: 'white',
               padding: 5,
               marginTop:-5,
             }}
-            value={city}
+            value={cityId}
           />
         </Pressable>
       </View>
@@ -124,7 +137,7 @@ export default function Home({route,navigation}) {
               <TouchableOpacity
                 // key={index}
                 onPress={() =>
-                  navigation.navigate('MovieDetails',{movieItem : item, userDetails:route.params.userDetails})
+                  navigation.navigate('MovieDetails',{movieItem : item, userDetails:route.params.userDetails, cityId : cityId})
                 }>
                 <MovieCard
                   poster={item.poster}
@@ -146,7 +159,7 @@ export default function Home({route,navigation}) {
               <TouchableOpacity
                 key={item.movieId}
                 onPress={() =>
-                  navigation.navigate('MovieDetails',{movieItem : item,  userDetails:route.params.userDetails})
+                  navigation.navigate('MovieDetails',{movieItem : item,  userDetails:route.params.userDetails, cityId : cityId})
                 }>
                 <MovieCard
                   poster={item.poster}

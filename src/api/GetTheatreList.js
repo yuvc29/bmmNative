@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const GetTheatreList = async(cityId, movieId, date) => {
 	try {
+		console.log("Theater Obj:" , cityId);
 		let response =  await axios.get(`${server_url}/theater/cityMovieDate?cityId=${cityId}&movieId=${movieId}&date=${date}`);
 		// console.log("******Theaters***", response);
 		return response;

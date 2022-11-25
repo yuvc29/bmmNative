@@ -120,7 +120,7 @@ const Seating = ({route, navigation}) => {
 
             <View style = {styles.topBar} >
                 <Text style = {{color:"black", fontWeight:"bold"}}>Left to Select: {ticket.seatCount - selectedCount}</Text>
-                <TouchableOpacity onPress={()=> toggleModalVisibility()}><Image style = {{alignSelf:"flex-end", marginBottom:10}} source = {require('/home/tushar/Desktop/BookMyMovie/bmmNative/src/static/icons8-pencil-24.png')} ></Image></TouchableOpacity>
+                {/* <TouchableOpacity onPress={()=> toggleModalVisibility()}><Image style = {{alignSelf:"flex-end", marginBottom:10}} source = {require('/home/tushar/Desktop/BookMyMovie/bmmNative/src/static/icons8-pencil-24.png')} ></Image></TouchableOpacity> */}
             </View>
             
 

@@ -1,19 +1,46 @@
-import React, { useEffect } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import {FlatList, Image, StyleSheet, View, Text} from 'react-native';
 import { getOrdersByUserId } from '../api/GetOrdersByUserId';
 import data from './MovieData'
 
 export default function Orders({route, navigation}) {
 
+  const [orderList, setOrderList] = useState([]);
+
   useEffect(() => {
    const fetchOrders = async() => {
     const response = await getOrdersByUserId(route.params.userDetails.userId);
-    console.log("Orders by User Id :",response.data);
+    const data = response.data;
+    let finalOrderList = [];
+    let finalMovieList = [];
+
+    
+
+    data.map(async(field) => {
+      const temp = field.split(',');
+      const movieResponse = await axios.get(`${server_url}/movie/${temp[1]}`);
+      obj = {
+        showId : temp[0],
+        movieId : temp[1],
+        theaterName : temp[2],
+        timing: temp[3],
+        city : temp[4], 
+        poster: movieResponse.data.poster,
+        movieName: movieResponse.data.title,
+        language: movieResponse.data.language,
+        format : movieResponse.data.format,
+      }
+
+      
+      finalOrderList.push(obj);
+      setOrderList(finalOrderList);
+    })
+    
   }
   fetchOrders();
   }, [])
   
-
 const item = ({item})=>{
     return(
         <View key={item.movieId} style={styles.ticket}>
@@ -21,21 +48,22 @@ const item = ({item})=>{
             <Image style={styles.image} source={{uri: item.poster}} />
             <View style={styles.movieInfo}>
               <Text>
-                {item.format}
+                {item.movieName}
               </Text>
               <Text>{item.language}</Text>
-              <Text style={styles.screen}>{item.title}</Text>
-              <Text>time</Text>
+              <Text>{item.format}</Text>
+              <Text>{item.title}</Text>
+              <Text>{item.timing}</Text>
             </View>
           </View>
           <View style={styles.ticketMid}>
             <View>
-              <Text>city</Text>
-              <Text style={styles.screen}>theatre</Text>
+              <Text>City</Text>
+              <Text style={styles.screen}>{item.city}</Text>
             </View>
             <View>
-              <Text>Seats</Text>
-              <Text style={styles.screen}>a1,a2</Text>
+              <Text>Theater</Text>
+              <Text style={styles.screen}>{item.theaterName}</Text>
             </View>
           </View>
         </View>
@@ -44,7 +72,7 @@ const item = ({item})=>{
 
   return (
     <FlatList
-      data={data}
+      data={orderList}
       renderItem={item}
       ListEmptyComponent={
         <View style={styles.empty}>
@@ -62,6 +90,7 @@ const styles = StyleSheet.create({
     marginVertical:10,
     backgroundColor:'#D4D8E3',
     borderRadius:10,
+    justifyContent:"space-between",
   },
   movieInfo:{
     marginTop:20,

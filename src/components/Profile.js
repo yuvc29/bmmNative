@@ -10,9 +10,9 @@ import {
   Button,
   Image,
 } from 'react-native';
-import {UserSignup} from '../api/UserSignup'
 import {user} from '../assets';
 import UserDetailsSchema from '../schema/UserDetailsSchema';
+import { UpdateUser } from '../api/UpdateUser';
 
 export default function Profile({route, navigation}) {
   const [firstName, setFirstName] = useState(route.params.userDetails.firstName);
@@ -23,6 +23,10 @@ export default function Profile({route, navigation}) {
   const [gender, setGender] = useState(route.params.userDetails.gender);
   const [genderCheck, setGenderCheck] = useState(route.params.userDetails.gender=="female"?true:false);
   const [change, setChange] = useState(false);
+
+  useEffect ( () => { 
+      setChange(!change);
+  }, [firstName,lastName, dob, email, gender]);
 
   // useEffect(()=>{
   //   setChange(!change);
@@ -43,13 +47,11 @@ export default function Profile({route, navigation}) {
         firstName: firstName,
         lastName: lastName,
         dob: dob,
-        password: mobile,
         email: email,
         gender: gender,
       };
-      // console.log(obj);
-      const response = await UserSignup(obj);
-      // console.log(response);
+      const response = await UpdateUser(route.params.userDetails.userId, obj);
+      console.log("user update Status", response.status);
     };
     fetchData();
   };
@@ -89,7 +91,7 @@ export default function Profile({route, navigation}) {
             keyboardType="number-pad"
             placeholder="91090XXXXX"
             placeholderTextColor="#AFB0B0"
-            onChange={text => {
+            onChangeText={text => {
               setMobile(text)
             }}
             >{mobile}</TextInput>
@@ -99,7 +101,7 @@ export default function Profile({route, navigation}) {
             keyboardType="email-address"
             placeholder="eg: abc@gmail.com"
             placeholderTextColor="#AFB0B0"
-            onChange={text => {
+            onChangeText={text => {
               setEmail(text)
             }}>{email}</TextInput>
           
@@ -112,7 +114,7 @@ export default function Profile({route, navigation}) {
               style={styles.textInput}
               placeholder="Enter first name here"
               placeholderTextColor="#AFB0B0"
-              onChange={text => {
+              onChangeText={text => {
                 setFirstName(text)
               }}
             >{firstName}</TextInput>
@@ -121,7 +123,7 @@ export default function Profile({route, navigation}) {
               style={styles.textInput}
               placeholder="Enter last name here"
               placeholderTextColor="#AFB0B0"
-              onChange={text => {
+              onChangeText={text => {
                 setLastName(text)
               }}
               >{lastName}</TextInput>
@@ -131,7 +133,7 @@ export default function Profile({route, navigation}) {
               keyboardType="phone-pad"
               placeholder="DD/MM/YY"
               placeholderTextColor="#AFB0B0"
-              onChange={text => {
+              onChangeText={text => {
                 setDob(text)
               }}
               >{dob}</TextInput>
@@ -156,8 +158,8 @@ export default function Profile({route, navigation}) {
         <Button
           title="Save Changes"
           color="#f14c63"
-          disabled={change ? false : true}
-          onPress={handleSave}
+          disabled={change}
+          onPress={() => handleSave()}
         />
       </View>
     </View>

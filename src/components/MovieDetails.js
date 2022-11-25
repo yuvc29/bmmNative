@@ -83,7 +83,7 @@ export default function MovieDetails({route, navigation}) {
                     source={{uri: field.poster}}
                     style={styles.castImage}
                   />
-                  <Text style={styles.castText}>
+                  <Text >
                     {field.firstName + ' ' + field.lastName}
                   </Text>
                 </View>
@@ -116,6 +116,7 @@ export default function MovieDetails({route, navigation}) {
             navigation.navigate('TheatreTimeSelection', {
               movieItem: route.params.movieItem,
               userDetails: route.params.userDetails,
+              cityId : route.params.cityId,
             })
           }
         />
@@ -146,6 +147,7 @@ const styles = StyleSheet.create({
   castText: {
     fontSize: 18,
     // fontWeight:'10',
+    fontWeight:'400',
     color: 'black',
   },
   image: {
@@ -161,6 +163,7 @@ const styles = StyleSheet.create({
   },
   castCard: {
     marginRight: 20,
+    alignItems: 'center',
   },
   button: {
     // backgroundColor:'black',
